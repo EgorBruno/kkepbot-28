@@ -5,7 +5,7 @@ import { ru } from 'date-fns/locale';
 import { students, absences } from '../data/mockData';
 import { Absence, Student } from '../types';
 import { Button } from './ui/button';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, Lock, Unlock } from 'lucide-react';
 import { 
   Dialog,
   DialogContent,
@@ -26,6 +26,7 @@ const today = format(new Date(), 'yyyy-MM-dd');
 const AbsenceList = () => {
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentAbsences, setCurrentAbsences] = useState(absences.filter(a => a.date === today));
+  const [isLocked, setIsLocked] = useState(true);
   
   const formatDisplayDate = (date: string) => {
     return format(new Date(date), 'd MMMM yyyy', { locale: ru });
@@ -36,6 +37,8 @@ const AbsenceList = () => {
   };
   
   const addAbsence = (student: Student, reason: string) => {
+    if (isLocked) return;
+    
     const newAbsence: Absence = {
       id: Date.now(),
       studentId: student.id,
@@ -47,6 +50,7 @@ const AbsenceList = () => {
   };
   
   const removeAbsence = (studentId: number) => {
+    if (isLocked) return;
     setCurrentAbsences(prev => prev.filter(absence => absence.studentId !== studentId));
   };
   
@@ -54,7 +58,29 @@ const AbsenceList = () => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Отсутствующие</h2>
-        <div className="text-sm text-gray-500">{formatDisplayDate(selectedDate)}</div>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => setIsLocked(!isLocked)}
+          className={`${isLocked ? 'text-red-500' : 'text-green-500'}`}
+        >
+          {isLocked ? (
+            <>
+              <Lock className="mr-1.5 h-4 w-4" />
+              Разблокировать
+            </>
+          ) : (
+            <>
+              <Unlock className="mr-1.5 h-4 w-4" />
+              Заблокировать
+            </>
+          )}
+        </Button>
+      </div>
+      
+      <div className="text-sm text-gray-500 mb-4 bg-gray-50 p-3 rounded-lg">
+        <p>{formatDisplayDate(selectedDate)}</p>
+        <p className="mt-1">{isLocked ? 'Редактирование заблокировано' : 'Редактирование разблокировано'}</p>
       </div>
       
       <div className="bg-white rounded-lg shadow mb-4">
@@ -100,6 +126,7 @@ const AbsenceList = () => {
                   variant="ghost" 
                   size="sm"
                   onClick={() => removeAbsence(student.id)}
+                  disabled={isLocked}
                   className="text-schedule-red"
                 >
                   <XCircle size={18} className="mr-1" />
@@ -108,7 +135,12 @@ const AbsenceList = () => {
               ) : (
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-schedule-gray">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-schedule-gray"
+                      disabled={isLocked}
+                    >
                       <CheckCircle2 size={18} className="mr-1" />
                       Отметить
                     </Button>

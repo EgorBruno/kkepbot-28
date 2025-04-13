@@ -22,6 +22,7 @@ const ClassTimer = () => {
     progressPercent: 0
   });
   
+  // Temporary mock for testing - make class end at 21:00
   useEffect(() => {
     const updatePeriodInfo = () => {
       const dayType = getCurrentDayType();
@@ -35,7 +36,16 @@ const ClassTimer = () => {
       }
       
       const schedule = getDailySchedule(dayType === 'saturday' ? 'saturday' : 'weekday');
-      const info = getCurrentPeriodInfo(schedule);
+      
+      // Temporarily modify the schedule for testing purposes
+      const modifiedSchedule = schedule.map(period => {
+        if (period === schedule[schedule.length - 1]) {
+          return { ...period, endTime: '21:00' };
+        }
+        return period;
+      });
+      
+      const info = getCurrentPeriodInfo(modifiedSchedule);
       setPeriodInfo(info);
     };
     
@@ -79,7 +89,7 @@ const ClassTimer = () => {
       <div className="flex justify-between items-center mb-3">
         <h3 className="font-semibold text-lg">{getStatusText()}</h3>
         {periodInfo.timeRemaining > 0 && !isAfterClasses && (
-          <span className="text-schedule-darkGray font-medium bg-white/30 px-2 py-1 rounded-full text-sm">
+          <span className="text-schedule-darkGray font-medium bg-white/30 px-3 py-1 rounded-full text-sm text-center">
             {formatMinutesToTime(periodInfo.timeRemaining)}
           </span>
         )}

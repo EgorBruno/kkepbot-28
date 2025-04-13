@@ -261,24 +261,22 @@ const DutyList = () => {
               <Button 
                 variant="destructive" 
                 className="flex-1" 
-                onClick={() => setReasonInput(prev => prev || 'Не выполнено')}
+                onClick={() => setReasonInput(prev => prev || 'Отпустили')}
               >
                 <XCircle size={16} className="mr-1.5" />
                 Не выполнено
               </Button>
             </div>
             
-            {reasonInput && (
-              <div className="space-y-2">
-                <p className="text-sm">Укажите причину невыполнения:</p>
-                <Textarea 
-                  value={reasonInput} 
-                  onChange={(e) => setReasonInput(e.target.value)}
-                  placeholder="Причина невыполнения дежурства..."
-                  rows={3}
-                />
-              </div>
-            )}
+            <div className="space-y-2">
+              <p className="text-sm">Укажите причину невыполнения:</p>
+              <Textarea 
+                value={reasonInput} 
+                onChange={(e) => setReasonInput(e.target.value)}
+                placeholder="Причина невыполнения дежурства..."
+                rows={3}
+              />
+            </div>
           </div>
           <DialogFooter className="flex justify-between">
             <Button variant="outline" onClick={() => {
@@ -287,14 +285,12 @@ const DutyList = () => {
             }}>
               Отмена
             </Button>
-            {reasonInput && (
-              <Button 
-                variant="default" 
-                onClick={() => handleCompleteWithReason(false)}
-              >
-                Сохранить
-              </Button>
-            )}
+            <Button 
+              variant="default" 
+              onClick={() => handleCompleteWithReason(false)}
+            >
+              Сохранить
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
