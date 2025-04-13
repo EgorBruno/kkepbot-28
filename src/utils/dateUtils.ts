@@ -1,4 +1,3 @@
-
 import { ClassPeriod } from '../types';
 
 export function formatTime(date: Date): string {
@@ -9,7 +8,10 @@ export function formatTime(date: Date): string {
 }
 
 export function getCurrentTime(): Date {
-  return new Date();
+  // For testing: Simulate a time 1 hour before the end of a class
+  const mockDate = new Date();
+  mockDate.setHours(16, 35, 0); // This will be during the 5th period (16:00 - 17:35)
+  return mockDate;
 }
 
 export function isWeekday(date: Date): boolean {
