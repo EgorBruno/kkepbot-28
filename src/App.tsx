@@ -12,11 +12,15 @@ import Duty from "./pages/Duty";
 import Reports from "./pages/Reports";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import CampusMap from "./pages/CampusMap";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const { theme } = useTheme();
+  
+  // Check if we're on the map page to hide navigation
+  const isMapPage = window.location.pathname === '/campus-map';
   
   return (
     <div className={`mobile-container ${theme}`}>
@@ -27,10 +31,11 @@ const AppContent = () => {
           <Route path="/duty" element={<Duty />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/campus-map" element={<CampusMap />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <BottomNavigation />
+      {!isMapPage && <BottomNavigation />}
     </div>
   );
 };

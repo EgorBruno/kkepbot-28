@@ -4,6 +4,7 @@ import { MapPin } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { useTheme } from '../contexts/ThemeContext';
+import { Link } from 'react-router-dom';
 
 const CampusNavigation = () => {
   const { theme, getThemeBasedClass } = useTheme();
@@ -34,7 +35,11 @@ const CampusNavigation = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" className="w-full">Открыть полную карту</Button>
+        <Button variant="outline" className="w-full" asChild>
+          <Link to="/campus-map" target="_blank" rel="noopener noreferrer">
+            Открыть полную карту
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   );
