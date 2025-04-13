@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -39,9 +38,12 @@ const studentFormSchema = z.object({
   totalDutyCount: z.number().int().min(0, { message: 'Число дежурств не может быть отрицательным' }),
 });
 
+// Create a type from the schema
+type StudentFormValues = z.infer<typeof studentFormSchema>;
+
 const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, existingGroups }) => {
   // Define form with validation
-  const form = useForm<z.infer<typeof studentFormSchema>>({
+  const form = useForm<StudentFormValues>({
     resolver: zodResolver(studentFormSchema),
     defaultValues: {
       name: student?.name || '',
@@ -54,13 +56,28 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
   });
 
   // Handle form submission
-  const handleSubmit = (values: z.infer<typeof studentFormSchema>) => {
+  const handleSubmit = (values: StudentFormValues) => {
     if (student) {
-      // Editing existing student
-      onSubmit({ ...values, id: student.id });
+      // Editing existing student - ensure all required fields are present
+      onSubmit({
+        id: student.id,
+        name: values.name,
+        group: values.group,
+        totalDutyCount: values.totalDutyCount,
+        email: values.email || undefined,
+        phone: values.phone || undefined,
+        role: values.role,
+      });
     } else {
-      // Adding new student
-      onSubmit(values);
+      // Adding new student - ensure all required fields are present
+      onSubmit({
+        name: values.name,
+        group: values.group,
+        totalDutyCount: values.totalDutyCount,
+        email: values.email || undefined,
+        phone: values.phone || undefined,
+        role: values.role,
+      });
     }
   };
 
