@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
-import { User, FileText, Download, School, Edit, Check, X } from 'lucide-react';
+import { User, FileText, Download, School, Edit, Check, X, Camera } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useTheme, themeOptions } from '../contexts/ThemeContext';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 // Mock profile data
 const initialProfileData = {
@@ -17,7 +18,22 @@ const initialProfileData = {
   phone: '+7 (999) 123-45-67',
   dutyCount: 3,
   absenceCount: 2,
+  photoUrl: '',
 };
+
+// Mock group options
+const groupOptions = [
+  { id: 'IS-31', name: 'ИС-31' },
+  { id: 'IS-32', name: 'ИС-32' },
+  { id: 'IS-33', name: 'ИС-33' },
+];
+
+// Mock role options
+const roleOptions = [
+  { id: 'student', name: 'Студент' },
+  { id: 'headman', name: 'Староста' },
+  { id: 'deputy', name: 'Заместитель старосты' },
+];
 
 const ProfileInfo = () => {
   const [profileData, setProfileData] = useState({ ...initialProfileData });
@@ -25,15 +41,25 @@ const ProfileInfo = () => {
   const [editData, setEditData] = useState({ ...initialProfileData });
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const handleEdit = () => {
     setEditData({ ...profileData });
     setIsEditing(true);
+    setPhotoPreview(null);
   };
 
   const handleSave = () => {
-    setProfileData({ ...editData });
+    // Update profile with new data including photo
+    const updatedProfile = { 
+      ...editData, 
+      photoUrl: photoPreview || profileData.photoUrl 
+    };
+    
+    setProfileData(updatedProfile);
     setIsEditing(false);
+    setPhotoPreview(null);
+    
     toast({
       title: "Профиль обновлен",
       description: "Ваши данные успешно сохранены",
@@ -42,6 +68,18 @@ const ProfileInfo = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
+    setPhotoPreview(null);
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleThemeChange = (value: string) => {
@@ -52,17 +90,99 @@ const ProfileInfo = () => {
     });
   };
 
+  // Get initials for avatar fallback
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  };
+
   return (
     <div className="pb-6">
       <div className="flex flex-col items-center mb-6">
-        <div className="w-24 h-24 bg-schedule-lightPurple rounded-full flex items-center justify-center mb-4">
-          <User size={40} className="text-schedule-purple" />
+        <div className="relative mb-4">
+          <Avatar className="w-24 h-24">
+            {(profileData.photoUrl || photoPreview) ? (
+              <AvatarImage 
+                src={photoPreview || profileData.photoUrl} 
+                alt={profileData.name} 
+                className="object-cover"
+              />
+            ) : (
+              <AvatarFallback className="bg-schedule-lightPurple text-schedule-purple text-xl">
+                {getInitials(profileData.name)}
+              </AvatarFallback>
+            )}
+          </Avatar>
+          
+          {isEditing && (
+            <label htmlFor="photo-upload" className="absolute bottom-0 right-0 bg-schedule-purple text-white p-1.5 rounded-full cursor-pointer">
+              <Camera size={16} />
+              <input 
+                id="photo-upload" 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                onChange={handlePhotoChange}
+              />
+            </label>
+          )}
         </div>
-        <h2 className="text-xl font-semibold">{profileData.name}</h2>
-        <div className="flex items-center text-gray-500 mt-1">
-          <School size={16} className="mr-1" />
-          <span>{profileData.group} • {profileData.role}</span>
-        </div>
+        
+        {!isEditing ? (
+          <>
+            <h2 className="text-xl font-semibold">{profileData.name}</h2>
+            <div className="flex items-center text-gray-500 mt-1">
+              <School size={16} className="mr-1" />
+              <span>{profileData.group} • {profileData.role}</span>
+            </div>
+          </>
+        ) : (
+          <div className="w-full max-w-xs space-y-3">
+            <Input 
+              value={editData.name}
+              onChange={(e) => setEditData({...editData, name: e.target.value})}
+              placeholder="ФИО"
+              className="text-center"
+            />
+            <div className="grid grid-cols-2 gap-2">
+              <Select 
+                value={editData.group} 
+                onValueChange={(value) => setEditData({...editData, group: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Группа" />
+                </SelectTrigger>
+                <SelectContent>
+                  {groupOptions.map(group => (
+                    <SelectItem key={group.id} value={group.name}>
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <Select 
+                value={editData.role} 
+                onValueChange={(value) => setEditData({...editData, role: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Роль" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roleOptions.map(role => (
+                    <SelectItem key={role.id} value={role.name}>
+                      {role.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )}
       </div>
       
       <Card className="mb-6 card-shadow">

@@ -36,7 +36,7 @@ const CampusNavigation = () => {
       </CardContent>
       <CardFooter>
         <Button variant="outline" className="w-full" asChild>
-          <Link to="/campus-map" target="_blank" rel="noopener noreferrer">
+          <Link to="/campus-map">
             Открыть полную карту
           </Link>
         </Button>
