@@ -8,8 +8,10 @@ import {
 } from '../utils/dateUtils';
 import { getDailySchedule } from '../data/bellSchedule';
 import { Progress } from '@/components/ui/progress';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ClassTimer = () => {
+  const { theme } = useTheme();
   const [periodInfo, setPeriodInfo] = useState<{
     currentPeriod?: ClassPeriod;
     nextPeriod?: ClassPeriod;
@@ -73,16 +75,50 @@ const ClassTimer = () => {
   // Calculate if we're outside of class hours
   const isAfterClasses = !periodInfo.currentPeriod && !periodInfo.nextPeriod;
   
+  // Определим классы в зависимости от темы
+  const getThemeGradient = (isBreak: boolean) => {
+    switch (theme) {
+      case 'blue': 
+        return isBreak 
+          ? 'bg-gradient-to-r from-blue-400 to-blue-300 shadow-[0_0_15px_rgba(13,148,233,0.3)]'
+          : 'bg-gradient-to-r from-blue-300 to-blue-200 shadow-[0_0_15px_rgba(13,148,233,0.3)]';
+      case 'green': 
+        return isBreak 
+          ? 'bg-gradient-to-r from-green-400 to-green-300 shadow-[0_0_15px_rgba(94,184,94,0.3)]'
+          : 'bg-gradient-to-r from-green-300 to-green-200 shadow-[0_0_15px_rgba(94,184,94,0.3)]';
+      case 'dark': 
+        return isBreak 
+          ? 'bg-gradient-to-r from-gray-700 to-gray-600 shadow-[0_0_15px_rgba(0,0,0,0.3)]'
+          : 'bg-gradient-to-r from-gray-600 to-gray-500 shadow-[0_0_15px_rgba(0,0,0,0.3)]';
+      default: // Фиолетовая тема (по умолчанию)
+        return isBreak 
+          ? 'bg-gradient-to-r from-schedule-blue to-blue-200 shadow-[0_0_15px_rgba(13,148,233,0.3)]' 
+          : 'bg-gradient-to-r from-schedule-lightPurple to-purple-200 shadow-[0_0_15px_rgba(155,135,245,0.3)]';
+    }
+  };
+  
+  // Определим класс для прогресс-бара в зависимости от темы
+  const getProgressBarClass = (isBreak: boolean) => {
+    switch (theme) {
+      case 'blue': 
+        return 'from-blue-500 to-blue-400';
+      case 'green': 
+        return 'from-green-500 to-green-400';
+      case 'dark': 
+        return 'from-gray-300 to-gray-400';
+      default: // Фиолетовая тема
+        return isBreak 
+          ? 'from-blue-400 to-cyan-400' 
+          : 'from-purple-400 to-pink-400';
+    }
+  };
+  
   // Class determination for the glow effect
   const glowClass = isAfterClasses 
     ? 'bg-gray-100' 
-    : periodInfo.isBreak 
-      ? 'bg-gradient-to-r from-schedule-blue to-blue-200 shadow-[0_0_15px_rgba(13,148,233,0.3)]' 
-      : 'bg-gradient-to-r from-schedule-lightPurple to-purple-200 shadow-[0_0_15px_rgba(155,135,245,0.3)]';
+    : getThemeGradient(periodInfo.isBreak);
   
-  const progressBarClass = periodInfo.isBreak 
-    ? 'from-blue-400 to-cyan-400' 
-    : 'from-purple-400 to-pink-400';
+  const progressBarClass = getProgressBarClass(periodInfo.isBreak);
   
   return (
     <div className={`rounded-lg p-4 mb-4 ${glowClass} ultra-smooth`}>

@@ -1,12 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { User, FileText, Download, School, Edit, Check, X } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
-import { Separator } from './ui/separator';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useTheme, themeOptions } from '../contexts/ThemeContext';
 
 // Mock profile data
 const initialProfileData = {
@@ -19,52 +19,12 @@ const initialProfileData = {
   absenceCount: 2,
 };
 
-type ThemeOption = {
-  id: string;
-  name: string;
-  color: string;
-  bodyClass: string;
-};
-
-const themeOptions: ThemeOption[] = [
-  { id: 'light', name: 'Светлая', color: '#ffffff', bodyClass: '' },
-  { id: 'dark', name: 'Темная', color: '#1E1E1E', bodyClass: 'dark' },
-  { id: 'purple', name: 'Фиолетовая', color: '#9b87f5', bodyClass: 'theme-purple' },
-  { id: 'blue', name: 'Голубая', color: '#0EA5E9', bodyClass: 'theme-blue' },
-  { id: 'green', name: 'Зеленая', color: '#5EB85E', bodyClass: 'theme-green' },
-];
-
 const ProfileInfo = () => {
   const [profileData, setProfileData] = useState({ ...initialProfileData });
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ ...initialProfileData });
-  const [selectedTheme, setSelectedTheme] = useState<string>('light');
+  const { theme, setTheme } = useTheme();
   const { toast } = useToast();
-
-  // Apply theme on initial load
-  useEffect(() => {
-    // Try to load theme from localStorage
-    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
-    setSelectedTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
-
-  const applyTheme = (themeId: string) => {
-    // Find the selected theme
-    const theme = themeOptions.find(t => t.id === themeId);
-    if (!theme) return;
-
-    // Remove all theme classes
-    document.body.classList.remove('dark', 'theme-purple', 'theme-blue', 'theme-green');
-    
-    // Add the new theme class if it's not empty
-    if (theme.bodyClass) {
-      document.body.classList.add(theme.bodyClass);
-    }
-    
-    // Save the theme preference
-    localStorage.setItem('selectedTheme', themeId);
-  };
 
   const handleEdit = () => {
     setEditData({ ...profileData });
@@ -85,8 +45,7 @@ const ProfileInfo = () => {
   };
 
   const handleThemeChange = (value: string) => {
-    setSelectedTheme(value);
-    applyTheme(value);
+    setTheme(value);
     toast({
       title: "Тема изменена",
       description: `Применена ${themeOptions.find(t => t.id === value)?.name.toLowerCase()} тема`,
@@ -185,19 +144,19 @@ const ProfileInfo = () => {
           <h3 className="font-medium">Цветовая тема</h3>
         </CardHeader>
         <CardContent className="pb-3">
-          <Select value={selectedTheme} onValueChange={handleThemeChange}>
+          <Select value={theme} onValueChange={handleThemeChange}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Выберите тему" />
             </SelectTrigger>
             <SelectContent>
-              {themeOptions.map((theme) => (
-                <SelectItem key={theme.id} value={theme.id} className="flex items-center">
+              {themeOptions.map((themeOption) => (
+                <SelectItem key={themeOption.id} value={themeOption.id} className="flex items-center">
                   <div className="flex items-center">
                     <span 
                       className="w-4 h-4 rounded-full mr-2 border border-gray-200" 
-                      style={{ backgroundColor: theme.color }}
+                      style={{ backgroundColor: themeOption.color }}
                     ></span>
-                    {theme.name}
+                    {themeOption.name}
                   </div>
                 </SelectItem>
               ))}

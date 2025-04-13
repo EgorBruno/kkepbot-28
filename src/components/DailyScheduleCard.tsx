@@ -4,8 +4,10 @@ import { getCurrentDayType } from '../utils/dateUtils';
 import { getDailySchedule } from '../data/bellSchedule';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { getCurrentPeriodInfo } from '../utils/dateUtils';
+import { useTheme } from '../contexts/ThemeContext';
 
 const DailyScheduleCard = () => {
+  const { theme } = useTheme();
   const dayType = getCurrentDayType();
   const schedule = getDailySchedule(dayType === 'saturday' ? 'saturday' : 'weekday');
   const periodInfo = getCurrentPeriodInfo(schedule);
@@ -13,6 +15,20 @@ const DailyScheduleCard = () => {
   const getTitleText = () => {
     if (dayType === 'sunday') return 'Расписание на понедельник';
     return dayType === 'saturday' ? 'Расписание на сегодня (суббота)' : 'Расписание на сегодня';
+  };
+  
+  // Определяем цвета активной пары в зависимости от темы
+  const getActiveClassStyles = () => {
+    switch (theme) {
+      case 'blue':
+        return 'bg-schedule-blue border-l-4 border-schedule-purple';
+      case 'green':
+        return 'bg-schedule-lightPurple border-l-4 border-schedule-purple';
+      case 'dark':
+        return 'bg-gray-700 border-l-4 border-gray-400';
+      default: // Фиолетовая тема
+        return 'bg-schedule-lightPurple border-l-4 border-schedule-purple';
+    }
   };
   
   return (
@@ -32,7 +48,7 @@ const DailyScheduleCard = () => {
                   key={period.id} 
                   className={`flex justify-between p-3 rounded-md ${
                     isActive 
-                      ? 'bg-schedule-lightPurple border-l-4 border-schedule-purple' 
+                      ? getActiveClassStyles()
                       : isPast 
                         ? 'bg-gray-50 text-gray-500' 
                         : 'bg-white border border-gray-100'

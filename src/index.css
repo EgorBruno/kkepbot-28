@@ -36,15 +36,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -75,14 +66,37 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  
+  .theme-purple {
+    /* Базовые цвета остаются теми же что и в светлой теме */
+    --primary: 254 86% 75%;
+    --schedule-purple: #9b87f5;
+    --schedule-lightPurple: #E5DEFF;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
+  }
+  
+  .theme-blue {
+    --primary: 210 100% 50%;
+    --schedule-purple: #0EA5E9;
+    --schedule-lightPurple: #D3E4FD;
+    --schedule-green: #0EA5E9;
+    --schedule-red: #E76F6F;
+    --card: 210 40% 98%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --border: 214.3 31.8% 91.4%;
+  }
+  
+  .theme-green {
+    --primary: 142 52% 46%;
+    --schedule-purple: #5EB85E;
+    --schedule-lightPurple: #E2F8E2;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
+    --card: 140 40% 98%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --border: 140 31.8% 91.4%;
   }
 }
 
@@ -190,6 +204,18 @@
   box-shadow: 0 4px 20px -2px rgba(155, 135, 245, 0.1);
 }
 
+.theme-blue .card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(13, 148, 233, 0.1);
+}
+
+.theme-green .card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(94, 184, 94, 0.1);
+}
+
+.dark .card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
+}
+
 .card-hover {
   transition: transform 0.16s cubic-bezier(0.17, 0.67, 0.83, 0.67), box-shadow 0.2s ease;
 }
@@ -199,21 +225,70 @@
   box-shadow: 0 2px 10px -2px rgba(155, 135, 245, 0.05);
 }
 
-/* Theme styles - these would be toggled via JS in a real implementation */
-body.theme-purple {
-  --primary: 254 86% 75%;
+.theme-blue .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(13, 148, 233, 0.05);
+}
+
+.theme-green .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(94, 184, 94, 0.05);
+}
+
+.dark .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Тематические настройки для компонентов */
+.dark button.bg-schedule-green {
+  background-color: rgba(94, 184, 94, 0.8);
+}
+
+.dark button.bg-schedule-purple {
+  background-color: rgba(155, 135, 245, 0.8);
+}
+
+.dark button.bg-schedule-lightPurple {
+  background-color: rgba(229, 222, 255, 0.2);
+}
+
+.theme-blue button.bg-schedule-green,
+.theme-blue button.bg-schedule-purple {
+  background-color: #0EA5E9;
+}
+
+.theme-green button.bg-schedule-green,
+.theme-green button.bg-schedule-purple {
+  background-color: #5EB85E;
+}
+
+/* Цветовые настройки в зависимости от темы */
+:root {
   --schedule-purple: #9b87f5;
   --schedule-lightPurple: #E5DEFF;
+  --schedule-blue: #D3E4FD;
+  --schedule-darkBlue: #0EA5E9;
+  --schedule-gray: #8E9196;
+  --schedule-darkGray: #1A1F2C;
+  --schedule-green: #5EB85E;
+  --schedule-red: #E76F6F;
 }
 
-body.theme-blue {
-  --primary: 210 100% 50%;
+.theme-blue {
   --schedule-purple: #0EA5E9;
   --schedule-lightPurple: #D3E4FD;
+  --schedule-blue: #D3E4FD;
+  --schedule-green: #0EA5E9;
 }
 
-body.theme-green {
-  --primary: 120 40% 55%;
+.theme-green {
   --schedule-purple: #5EB85E;
   --schedule-lightPurple: #E2F8E2;
+  --schedule-blue: #E2F8E2;
+  --schedule-green: #5EB85E;
+}
+
+.dark {
+  --schedule-purple: #9b87f5;
+  --schedule-lightPurple: rgba(155, 135, 245, 0.15);
+  --schedule-blue: rgba(13, 148, 233, 0.15);
+  --schedule-darkGray: #e0e0e0;
 }

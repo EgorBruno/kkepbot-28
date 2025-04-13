@@ -4,8 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { weekdaySchedule, saturdaySchedule } from '../data/bellSchedule';
 import { Card, CardContent } from './ui/card';
 import { getCurrentDayType } from '../utils/dateUtils';
+import { useTheme } from '../contexts/ThemeContext';
 
 const BellScheduleSection = () => {
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'weekday' | 'saturday'>('weekday');
   
   useEffect(() => {
@@ -18,6 +20,14 @@ const BellScheduleSection = () => {
     }
   }, []);
   
+  // Адаптивный класс для наведения на карточку в зависимости от темы
+  const getCardHoverClass = () => {
+    if (theme === 'dark') {
+      return 'hover:bg-gray-800';
+    }
+    return 'card-hover';
+  };
+  
   return (
     <Card className="mb-4 card-shadow">
       <CardContent className="pt-4">
@@ -29,7 +39,7 @@ const BellScheduleSection = () => {
           
           <TabsContent value="weekday" className="space-y-2">
             {weekdaySchedule.map((period) => (
-              <div key={period.id} className="flex justify-between p-3 border rounded-md card-hover">
+              <div key={period.id} className={`flex justify-between p-3 border rounded-md ${getCardHoverClass()}`}>
                 <div className="font-medium">{period.name}</div>
                 <div>{period.startTime} - {period.endTime}</div>
               </div>
@@ -38,7 +48,7 @@ const BellScheduleSection = () => {
           
           <TabsContent value="saturday" className="space-y-2">
             {saturdaySchedule.map((period) => (
-              <div key={period.id} className="flex justify-between p-3 border rounded-md card-hover">
+              <div key={period.id} className={`flex justify-between p-3 border rounded-md ${getCardHoverClass()}`}>
                 <div className="font-medium">{period.name}</div>
                 <div>{period.startTime} - {period.endTime}</div>
               </div>
