@@ -8,7 +8,7 @@ const tabs = [
   { id: 'absences', path: '/absences', icon: Users, label: 'Отсутствующие' },
   { id: 'duty', path: '/duty', icon: ClipboardCheck, label: 'Дежурство' },
   { id: 'reports', path: '/reports', icon: FileText, label: 'Отчеты' },
-  { id: 'profile', path: '/profile', icon: Profile, label: 'Профиль' },
+  { id: 'profile', path: '/profile', icon: User, label: 'Профиль' },
 ];
 
 const BottomNavigation = () => {
