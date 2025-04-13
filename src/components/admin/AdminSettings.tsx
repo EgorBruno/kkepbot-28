@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { Settings, Users, FileText, ShieldAlert } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const AdminSettings = () => {
   const { toast } = useToast();
@@ -107,11 +108,16 @@ const AdminSettings = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="duty-schedule">Расписание дежурств</Label>
-                <Select>
-                  <option value="random">Случайное</option>
-                  <option value="alphabetical">По алфавиту</option>
-                  <option value="role">По роли</option>
-                  <option value="manual" selected>Ручное назначение</option>
+                <Select defaultValue="manual">
+                  <SelectTrigger id="duty-schedule">
+                    <SelectValue placeholder="Выберите тип расписания" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="random">Случайное</SelectItem>
+                    <SelectItem value="alphabetical">По алфавиту</SelectItem>
+                    <SelectItem value="role">По роли</SelectItem>
+                    <SelectItem value="manual">Ручное назначение</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
             </CardContent>
@@ -147,10 +153,15 @@ const AdminSettings = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="default-format">Формат отчета по умолчанию</Label>
-                <Select>
-                  <option value="pdf" selected>PDF</option>
-                  <option value="excel">Excel</option>
-                  <option value="csv">CSV</option>
+                <Select defaultValue="pdf">
+                  <SelectTrigger id="default-format">
+                    <SelectValue placeholder="Выберите формат" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pdf">PDF</SelectItem>
+                    <SelectItem value="excel">Excel</SelectItem>
+                    <SelectItem value="csv">CSV</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
             </CardContent>
@@ -203,15 +214,6 @@ const AdminSettings = () => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
-
-// Simple select component for the settings
-const Select = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <select className="w-full p-2 border border-input rounded-md bg-background">
-      {children}
-    </select>
   );
 };
 

@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,6 +43,10 @@ const studentFormSchema = z.object({
 type StudentFormValues = z.infer<typeof studentFormSchema>;
 
 const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, existingGroups }) => {
+  // State for handling new group creation
+  const [isCreatingNewGroup, setIsCreatingNewGroup] = useState(false);
+  const [newGroupName, setNewGroupName] = useState('');
+
   // Define form with validation
   const form = useForm<StudentFormValues>({
     resolver: zodResolver(studentFormSchema),
@@ -57,12 +62,15 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
 
   // Handle form submission
   const handleSubmit = (values: StudentFormValues) => {
+    // Use new group name if creating a new group
+    const groupValue = values.group === "new-group" && isCreatingNewGroup ? newGroupName : values.group;
+    
     if (student) {
       // Editing existing student - ensure all required fields are present
       onSubmit({
         id: student.id,
         name: values.name,
-        group: values.group,
+        group: groupValue,
         totalDutyCount: values.totalDutyCount,
         email: values.email || undefined,
         phone: values.phone || undefined,
@@ -72,12 +80,23 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
       // Adding new student - ensure all required fields are present
       onSubmit({
         name: values.name,
-        group: values.group,
+        group: groupValue,
         totalDutyCount: values.totalDutyCount,
         email: values.email || undefined,
         phone: values.phone || undefined,
         role: values.role,
       });
+    }
+  };
+
+  // Handle group selection change
+  const handleGroupChange = (value: string) => {
+    if (value === "new-group") {
+      setIsCreatingNewGroup(true);
+      setNewGroupName('');
+    } else {
+      setIsCreatingNewGroup(false);
+      form.setValue('group', value);
     }
   };
 
@@ -105,22 +124,57 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Группа</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите группу" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {existingGroups.map((group) => (
-                      <SelectItem key={group} value={group}>{group}</SelectItem>
-                    ))}
-                    <SelectItem value="new">+ Новая группа</SelectItem>
-                  </SelectContent>
-                </Select>
+                {!isCreatingNewGroup ? (
+                  <Select
+                    onValueChange={handleGroupChange}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите группу" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {existingGroups.map((group) => (
+                        <SelectItem key={group} value={group}>{group}</SelectItem>
+                      ))}
+                      <SelectItem value="new-group">+ Новая группа</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="space-y-2">
+                    <Input 
+                      value={newGroupName}
+                      onChange={(e) => setNewGroupName(e.target.value)}
+                      placeholder="Введите название новой группы"
+                    />
+                    <div className="flex space-x-2">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setIsCreatingNewGroup(false);
+                          form.setValue('group', existingGroups[0] || '');
+                        }}
+                      >
+                        Отмена
+                      </Button>
+                      <Button 
+                        type="button" 
+                        size="sm"
+                        onClick={() => {
+                          if (newGroupName) {
+                            form.setValue('group', newGroupName);
+                          }
+                        }}
+                        disabled={!newGroupName}
+                      >
+                        Добавить
+                      </Button>
+                    </div>
+                  </div>
+                )}
                 <FormMessage />
               </FormItem>
             )}
