@@ -15,7 +15,7 @@ const BottomNavigation = () => {
   const location = useLocation();
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-10">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-10 ultra-smooth">
       <div className="max-w-[500px] mx-auto">
         <div className="flex items-center justify-between bottom-tab-height">
           {tabs.map((tab) => {
@@ -26,12 +26,20 @@ const BottomNavigation = () => {
               <Link
                 key={tab.id}
                 to={tab.path}
-                className={`flex flex-col items-center justify-center flex-1 py-1 ${
-                  isActive ? 'text-schedule-purple' : 'text-gray-500'
+                className={`flex flex-col items-center justify-center flex-1 py-1 smooth-transition ${
+                  isActive ? 'text-schedule-purple' : 'text-gray-400'
                 }`}
               >
-                <IconComponent size={24} className={isActive ? 'animate-pulse-soft' : ''} />
-                <span className="text-xs mt-1">{tab.label}</span>
+                <div className={`p-1.5 rounded-full ${isActive ? 'bg-schedule-lightPurple' : ''}`}>
+                  <IconComponent 
+                    size={22} 
+                    strokeWidth={isActive ? 2.5 : 1.8} 
+                    className={isActive ? 'ultra-smooth' : 'opacity-80 ultra-smooth'} 
+                  />
+                </div>
+                <span className={`text-xs mt-0.5 font-medium ${isActive ? 'opacity-100' : 'opacity-80'}`}>
+                  {tab.label}
+                </span>
               </Link>
             );
           })}
