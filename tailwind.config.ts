@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        schedule: {
+          purple: '#9b87f5',
+          lightPurple: '#E5DEFF',
+          blue: '#D3E4FD',
+          darkBlue: '#0EA5E9',
+          gray: '#8E9196',
+          darkGray: '#1A1F2C',
+          green: '#5EB85E',
+          red: '#E76F6F'
+        }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,12 +95,21 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'pulse-soft': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' }
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'pulse-soft': 'pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+			},
+      backgroundImage: {
+        'gradient-schedule': 'linear-gradient(109.6deg, rgba(223,234,247,1) 11.2%, rgba(244,248,252,1) 91.1%)',
+        'gradient-timer': 'linear-gradient(90deg, hsla(277, 75%, 84%, 1) 0%, hsla(297, 50%, 51%, 1) 100%)',
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
