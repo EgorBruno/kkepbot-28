@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import BottomNavigation from "./components/BottomNavigation";
 import Home from "./pages/Home";
@@ -13,14 +13,18 @@ import Reports from "./pages/Reports";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import CampusMap from "./pages/CampusMap";
+import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const { theme } = useTheme();
+  const location = useLocation();
   
-  // Check if we're on the map page to hide navigation
-  const isMapPage = window.location.pathname === '/campus-map';
+  // Check if we're on the map page or admin pages to hide navigation
+  const hideNavigation = location.pathname === '/campus-map' || 
+                        location.pathname.startsWith('/admin');
   
   return (
     <div className={`mobile-container ${theme}`}>
@@ -32,10 +36,12 @@ const AppContent = () => {
           <Route path="/reports" element={<Reports />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/campus-map" element={<CampusMap />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      {!isMapPage && <BottomNavigation />}
+      {!hideNavigation && <BottomNavigation />}
     </div>
   );
 };

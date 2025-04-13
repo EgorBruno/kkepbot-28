@@ -5,7 +5,10 @@ export type Student = {
   id: number;
   name: string;
   group: string;
+  email?: string;
+  phone?: string;
   totalDutyCount: number;
+  role?: 'student' | 'leader' | 'admin';
 };
 
 export type Absence = {
@@ -41,4 +44,14 @@ export type Lesson = {
   subject: string;
   teacher: string;
   classroom: string;
+};
+
+export type ReportType = 'individual' | 'group' | 'absences' | 'duties';
+
+export type ReportFilter = {
+  studentId?: number;
+  group?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  type?: ReportType;
 };
