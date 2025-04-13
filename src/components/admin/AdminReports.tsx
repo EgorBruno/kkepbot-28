@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,7 +68,6 @@ const AdminReports = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* Individual Student Report */}
         <TabsContent value="individual">
           <Card>
             <CardHeader>
@@ -86,9 +84,9 @@ const AdminReports = () => {
                   <div>
                     <label className="block text-sm font-medium mb-2">Группа</label>
                     <Select 
-                      value={selectedGroup} 
+                      value={selectedGroup || "all"} 
                       onValueChange={(value) => {
-                        setSelectedGroup(value);
+                        setSelectedGroup(value === "all" ? undefined : value);
                         setSelectedStudent(undefined);
                       }}
                     >
@@ -96,6 +94,7 @@ const AdminReports = () => {
                         <SelectValue placeholder="Выберите группу" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="all">Все группы</SelectItem>
                         {groups.map(group => (
                           <SelectItem key={group} value={group}>{group}</SelectItem>
                         ))}
@@ -106,14 +105,15 @@ const AdminReports = () => {
                   <div>
                     <label className="block text-sm font-medium mb-2">Студент</label>
                     <Select 
-                      value={selectedStudent?.toString()} 
-                      onValueChange={(value) => setSelectedStudent(parseInt(value))}
+                      value={selectedStudent?.toString() || "none"} 
+                      onValueChange={(value) => setSelectedStudent(value === "none" ? undefined : parseInt(value))}
                       disabled={!selectedGroup}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Выберите студента" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="none">Выберите студента</SelectItem>
                         {studentsInGroup.map(student => (
                           <SelectItem key={student.id} value={student.id.toString()}>
                             {student.name}
@@ -168,7 +168,6 @@ const AdminReports = () => {
           </Card>
         </TabsContent>
 
-        {/* Group Report */}
         <TabsContent value="group">
           <Card>
             <CardHeader>
@@ -184,13 +183,14 @@ const AdminReports = () => {
                 <div>
                   <label className="block text-sm font-medium mb-2">Группа</label>
                   <Select 
-                    value={selectedGroup} 
-                    onValueChange={setSelectedGroup}
+                    value={selectedGroup || "all"} 
+                    onValueChange={(value) => setSelectedGroup(value === "all" ? undefined : value)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите группу" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="all">Все группы</SelectItem>
                       {groups.map(group => (
                         <SelectItem key={group} value={group}>{group}</SelectItem>
                       ))}
@@ -242,7 +242,6 @@ const AdminReports = () => {
           </Card>
         </TabsContent>
 
-        {/* Absences Report */}
         <TabsContent value="absences">
           <Card>
             <CardHeader>
@@ -319,7 +318,6 @@ const AdminReports = () => {
           </Card>
         </TabsContent>
 
-        {/* Duties Report */}
         <TabsContent value="duties">
           <Card>
             <CardHeader>
@@ -414,7 +412,6 @@ const AdminReports = () => {
   );
 };
 
-// Helper component for date selection
 const DatePicker = ({ date, onSelect }: { date?: Date, onSelect: (date?: Date) => void }) => {
   return (
     <Popover>

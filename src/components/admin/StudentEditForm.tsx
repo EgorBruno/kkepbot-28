@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -29,7 +28,6 @@ interface StudentEditFormProps {
   existingGroups: string[];
 }
 
-// Form validation schema
 const studentFormSchema = z.object({
   name: z.string().min(2, { message: 'ФИО должно содержать минимум 2 символа' }),
   group: z.string().min(1, { message: 'Выберите группу' }),
@@ -39,15 +37,12 @@ const studentFormSchema = z.object({
   totalDutyCount: z.number().int().min(0, { message: 'Число дежурств не может быть отрицательным' }),
 });
 
-// Create a type from the schema
 type StudentFormValues = z.infer<typeof studentFormSchema>;
 
 const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, existingGroups }) => {
-  // State for handling new group creation
   const [isCreatingNewGroup, setIsCreatingNewGroup] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
 
-  // Define form with validation
   const form = useForm<StudentFormValues>({
     resolver: zodResolver(studentFormSchema),
     defaultValues: {
@@ -60,13 +55,10 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
     },
   });
 
-  // Handle form submission
   const handleSubmit = (values: StudentFormValues) => {
-    // Use new group name if creating a new group
     const groupValue = values.group === "new-group" && isCreatingNewGroup ? newGroupName : values.group;
     
     if (student) {
-      // Editing existing student - ensure all required fields are present
       onSubmit({
         id: student.id,
         name: values.name,
@@ -77,7 +69,6 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
         role: values.role,
       });
     } else {
-      // Adding new student - ensure all required fields are present
       onSubmit({
         name: values.name,
         group: groupValue,
@@ -89,7 +80,6 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
     }
   };
 
-  // Handle group selection change
   const handleGroupChange = (value: string) => {
     if (value === "new-group") {
       setIsCreatingNewGroup(true);
@@ -155,7 +145,7 @@ const StudentEditForm: React.FC<StudentEditFormProps> = ({ student, onSubmit, ex
                         size="sm"
                         onClick={() => {
                           setIsCreatingNewGroup(false);
-                          form.setValue('group', existingGroups[0] || '');
+                          form.setValue('group', existingGroups[0] || 'default');
                         }}
                       >
                         Отмена

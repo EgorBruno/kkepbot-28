@@ -120,7 +120,7 @@ const AdminStudentsList = () => {
               <SelectValue placeholder="Фильтр по группе" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Все группы</SelectItem>
+              <SelectItem value="all">Все группы</SelectItem>
               {groups.map(group => (
                 <SelectItem key={group} value={group}>{group}</SelectItem>
               ))}
