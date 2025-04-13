@@ -165,12 +165,25 @@
   }
 }
 
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px 2px rgba(155, 135, 245, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px 5px rgba(155, 135, 245, 0.5);
+  }
+}
+
 .appear-smooth {
   animation: smooth-appear 0.24s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .pulse-minimal {
   animation: pulse-minimal 2s ease-in-out infinite;
+}
+
+.glow-effect {
+  animation: glow 3s ease-in-out infinite;
 }
 
 .card-shadow {
@@ -184,4 +197,23 @@
 .card-hover:active {
   transform: translateY(1px);
   box-shadow: 0 2px 10px -2px rgba(155, 135, 245, 0.05);
+}
+
+/* Theme styles - these would be toggled via JS in a real implementation */
+body.theme-purple {
+  --primary: 254 86% 75%;
+  --schedule-purple: #9b87f5;
+  --schedule-lightPurple: #E5DEFF;
+}
+
+body.theme-blue {
+  --primary: 210 100% 50%;
+  --schedule-purple: #0EA5E9;
+  --schedule-lightPurple: #D3E4FD;
+}
+
+body.theme-green {
+  --primary: 120 40% 55%;
+  --schedule-purple: #5EB85E;
+  --schedule-lightPurple: #E2F8E2;
 }

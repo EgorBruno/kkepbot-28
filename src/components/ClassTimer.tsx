@@ -7,6 +7,7 @@ import {
   getCurrentDayType
 } from '../utils/dateUtils';
 import { getDailySchedule } from '../data/bellSchedule';
+import { Progress } from '@/components/ui/progress';
 
 const ClassTimer = () => {
   const [periodInfo, setPeriodInfo] = useState<{
@@ -61,18 +62,24 @@ const ClassTimer = () => {
   
   // Calculate if we're outside of class hours
   const isAfterClasses = !periodInfo.currentPeriod && !periodInfo.nextPeriod;
-  const bgClass = isAfterClasses 
+  
+  // Class determination for the glow effect
+  const glowClass = isAfterClasses 
     ? 'bg-gray-100' 
     : periodInfo.isBreak 
-      ? 'bg-schedule-blue' 
-      : 'bg-schedule-lightPurple';
+      ? 'bg-gradient-to-r from-schedule-blue to-blue-200 shadow-[0_0_15px_rgba(13,148,233,0.3)]' 
+      : 'bg-gradient-to-r from-schedule-lightPurple to-purple-200 shadow-[0_0_15px_rgba(155,135,245,0.3)]';
+  
+  const progressBarClass = periodInfo.isBreak 
+    ? 'from-blue-400 to-cyan-400' 
+    : 'from-purple-400 to-pink-400';
   
   return (
-    <div className={`rounded-lg p-4 mb-4 ${bgClass}`}>
-      <div className="flex justify-between items-center mb-2">
+    <div className={`rounded-lg p-4 mb-4 ${glowClass} ultra-smooth`}>
+      <div className="flex justify-between items-center mb-3">
         <h3 className="font-semibold text-lg">{getStatusText()}</h3>
         {periodInfo.timeRemaining > 0 && !isAfterClasses && (
-          <span className="text-schedule-darkGray font-medium">
+          <span className="text-schedule-darkGray font-medium bg-white/30 px-2 py-1 rounded-full text-sm">
             {formatMinutesToTime(periodInfo.timeRemaining)}
           </span>
         )}
@@ -80,14 +87,18 @@ const ClassTimer = () => {
       
       {periodInfo.timeRemaining > 0 && !isAfterClasses && (
         <>
-          <div className="w-full bg-white/50 rounded-full h-2 mb-2">
+          <div className="w-full bg-white/30 rounded-full h-2.5 mb-2 overflow-hidden">
             <div 
-              className={`h-2 rounded-full ${periodInfo.isBreak ? 'bg-schedule-darkBlue' : 'bg-schedule-purple'}`}
-              style={{ width: `${periodInfo.progressPercent}%` }}
+              className={`h-2.5 rounded-full bg-gradient-to-r ${progressBarClass}`}
+              style={{ 
+                width: `${periodInfo.progressPercent}%`,
+                boxShadow: '0 0 10px rgba(155, 135, 245, 0.5)',
+                transition: 'width 1s ease-in-out'
+              }}
             ></div>
           </div>
           
-          <div className="flex justify-between text-sm text-schedule-gray">
+          <div className="flex justify-between text-sm text-schedule-darkGray/80">
             {periodInfo.isBreak ? (
               <>
                 <span>{periodInfo.currentPeriod?.endTime || ''}</span>
@@ -103,8 +114,10 @@ const ClassTimer = () => {
           
           {periodInfo.nextPeriod && (
             <div className="mt-3 text-sm text-schedule-darkGray">
-              <span>Следующая пара: </span>
-              <span className="font-semibold">{periodInfo.nextPeriod.name} ({periodInfo.nextPeriod.startTime})</span>
+              <div className="bg-white/40 px-3 py-2 rounded-md inline-block">
+                <span>Следующая пара: </span>
+                <span className="font-semibold">{periodInfo.nextPeriod.name} ({periodInfo.nextPeriod.startTime})</span>
+              </div>
             </div>
           )}
         </>

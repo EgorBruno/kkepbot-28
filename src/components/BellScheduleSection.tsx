@@ -1,16 +1,27 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { weekdaySchedule, saturdaySchedule } from '../data/bellSchedule';
 import { Card, CardContent } from './ui/card';
+import { getCurrentDayType } from '../utils/dateUtils';
 
 const BellScheduleSection = () => {
   const [activeTab, setActiveTab] = useState<'weekday' | 'saturday'>('weekday');
   
+  useEffect(() => {
+    // Set default tab based on current day
+    const dayType = getCurrentDayType();
+    if (dayType === 'saturday') {
+      setActiveTab('saturday');
+    } else {
+      setActiveTab('weekday');
+    }
+  }, []);
+  
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 card-shadow">
       <CardContent className="pt-4">
-        <Tabs defaultValue="weekday" onValueChange={(value) => setActiveTab(value as any)}>
+        <Tabs defaultValue={activeTab} value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
           <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="weekday">Будни</TabsTrigger>
             <TabsTrigger value="saturday">Суббота</TabsTrigger>
@@ -18,7 +29,7 @@ const BellScheduleSection = () => {
           
           <TabsContent value="weekday" className="space-y-2">
             {weekdaySchedule.map((period) => (
-              <div key={period.id} className="flex justify-between p-3 border rounded-md">
+              <div key={period.id} className="flex justify-between p-3 border rounded-md card-hover">
                 <div className="font-medium">{period.name}</div>
                 <div>{period.startTime} - {period.endTime}</div>
               </div>
@@ -27,7 +38,7 @@ const BellScheduleSection = () => {
           
           <TabsContent value="saturday" className="space-y-2">
             {saturdaySchedule.map((period) => (
-              <div key={period.id} className="flex justify-between p-3 border rounded-md">
+              <div key={period.id} className="flex justify-between p-3 border rounded-md card-hover">
                 <div className="font-medium">{period.name}</div>
                 <div>{period.startTime} - {period.endTime}</div>
               </div>
