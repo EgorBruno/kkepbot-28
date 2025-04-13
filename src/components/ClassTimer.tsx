@@ -75,36 +75,36 @@ const ClassTimer = () => {
   // Calculate if we're outside of class hours
   const isAfterClasses = !periodInfo.currentPeriod && !periodInfo.nextPeriod;
   
-  // New subtle RGB gradients based on the theme and status
+  // Enhanced subtle RGB gradients based on the theme and status
   const getThemeGradient = (isBreak: boolean) => {
     if (isAfterClasses) {
       return getThemeBasedClass({
-        light: 'bg-gray-100',
-        dark: 'bg-gray-800',
-        blue: 'bg-blue-100',
-        green: 'bg-green-100',
-        purple: 'bg-purple-100'
-      });
+        light: 'bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100',
+        dark: 'bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800',
+        blue: 'bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100',
+        green: 'bg-gradient-to-r from-green-100 via-green-50 to-green-100',
+        purple: 'bg-gradient-to-r from-purple-100 via-purple-50 to-purple-100'
+      }) + ' animate-gradient-x';
     }
     
     if (isBreak) {
-      // Subtle break time gradients with RGB animation
+      // Subtle break time RGB gradients with animation
       return getThemeBasedClass({
-        light: 'bg-gradient-to-r from-blue-100 via-blue-200 to-blue-100 animate-gradient-x',
-        dark: 'bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 animate-gradient-x',
-        blue: 'bg-gradient-to-r from-blue-200 via-blue-300 to-blue-200 animate-gradient-x',
-        green: 'bg-gradient-to-r from-green-100 via-green-200 to-green-100 animate-gradient-x',
-        purple: 'bg-gradient-to-r from-purple-100 via-purple-200 to-purple-100 animate-gradient-x'
-      });
+        light: 'bg-gradient-to-r from-blue-100 via-indigo-50 to-blue-100',
+        dark: 'bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800',
+        blue: 'bg-gradient-to-r from-blue-200 via-sky-100 to-blue-200',
+        green: 'bg-gradient-to-r from-green-100 via-emerald-50 to-green-100',
+        purple: 'bg-gradient-to-r from-purple-100 via-violet-50 to-purple-100'
+      }) + ' animate-gradient-x';
     } else {
-      // Subtle class time gradients with RGB animation
+      // Subtle class time RGB gradients with animation
       return getThemeBasedClass({
-        light: 'bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 animate-gradient-x',
-        dark: 'bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 animate-gradient-x',
-        blue: 'bg-gradient-to-r from-blue-100 via-indigo-100 to-blue-100 animate-gradient-x',
-        green: 'bg-gradient-to-r from-green-100 via-emerald-100 to-green-100 animate-gradient-x',
-        purple: 'bg-gradient-to-r from-purple-100 via-violet-100 to-purple-100 animate-gradient-x'
-      });
+        light: 'bg-gradient-to-r from-purple-100 via-pink-50 to-purple-100',
+        dark: 'bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800',
+        blue: 'bg-gradient-to-r from-blue-100 via-cyan-50 to-blue-100',
+        green: 'bg-gradient-to-r from-green-100 via-teal-50 to-green-100',
+        purple: 'bg-gradient-to-r from-purple-100 via-fuchsia-50 to-purple-100'
+      }) + ' animate-gradient-x';
     }
   };
   
@@ -128,11 +128,11 @@ const ClassTimer = () => {
   };
   
   return (
-    <div className={`rounded-lg p-4 mb-4 ${getThemeGradient(periodInfo.isBreak)} shadow-lg ultra-smooth`}>
+    <div className={`rounded-lg p-4 mb-4 shadow-lg ultra-smooth ${getThemeGradient(periodInfo.isBreak)}`}>
       <div className="flex justify-between items-center mb-3">
         <h3 className="font-semibold text-lg">{getStatusText()}</h3>
         {periodInfo.timeRemaining > 0 && !isAfterClasses && (
-          <span className={`text-schedule-darkGray font-medium ${getBackgroundTextClass()} px-3 py-1 rounded-full text-sm text-center`}>
+          <span className={`${getBackgroundTextClass()} px-3 py-1 rounded-full text-sm text-center`}>
             {formatMinutesToTime(periodInfo.timeRemaining)}
           </span>
         )}
@@ -145,7 +145,6 @@ const ClassTimer = () => {
               className={`h-2.5 rounded-full bg-gradient-to-r ${getProgressBarClass(periodInfo.isBreak)}`}
               style={{ 
                 width: `${periodInfo.progressPercent}%`,
-                boxShadow: '0 0 10px rgba(155, 135, 245, 0.5)',
                 transition: 'width 1s ease-in-out'
               }}
             ></div>
