@@ -1,18 +1,5 @@
 
-export type DayType = 'weekday' | 'saturday';
-
-export type ClassPeriod = {
-  id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
-};
-
-export type BellSchedule = {
-  id: number;
-  dayType: DayType;
-  periods: ClassPeriod[];
-};
+export type DayType = 'weekday' | 'saturday' | 'sunday';
 
 export type Student = {
   id: number;
@@ -35,8 +22,23 @@ export type DutyAssignment = {
   completed: boolean;
 };
 
-export type Tab = {
-  id: string;
-  label: string;
-  icon: string;
+export type ClassPeriod = {
+  id: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+};
+
+export type BellSchedule = {
+  id: number;
+  dayType: 'weekday' | 'saturday';
+  periods: ClassPeriod[];
+};
+
+export type Lesson = {
+  id: number;
+  periodId: number;
+  subject: string;
+  teacher: string;
+  classroom: string;
 };

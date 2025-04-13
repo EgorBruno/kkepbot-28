@@ -5,6 +5,8 @@ import { getDailySchedule } from '../data/bellSchedule';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { getCurrentPeriodInfo } from '../utils/dateUtils';
 import { useTheme } from '../contexts/ThemeContext';
+import { getLessonByPeriodId } from '../data/mockData';
+import { BookOpen, User, MapPin } from 'lucide-react';
 
 const DailyScheduleCard = () => {
   const { theme, getThemeBasedClass } = useTheme();
@@ -52,16 +54,17 @@ const DailyScheduleCard = () => {
         <CardTitle className="text-lg font-semibold">{getTitleText()}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {dayType !== 'sunday' ? (
             schedule.map((period) => {
               const isActive = periodInfo.currentPeriod?.id === period.id && !periodInfo.isBreak;
               const isPast = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) > period.endTime;
+              const lesson = getLessonByPeriodId(period.id);
               
               return (
                 <div 
                   key={period.id} 
-                  className={`flex justify-between p-3 rounded-md ${
+                  className={`rounded-md ${
                     isActive 
                       ? getActiveClassStyles()
                       : isPast 
@@ -69,8 +72,31 @@ const DailyScheduleCard = () => {
                         : getUpcomingClassStyles()
                   }`}
                 >
-                  <div className="font-medium">{period.name}</div>
-                  <div>{period.startTime} - {period.endTime}</div>
+                  <div className="p-3">
+                    <div className="flex justify-between items-center">
+                      <div className="font-medium">{period.name}</div>
+                      <div className="text-sm">{period.startTime} - {period.endTime}</div>
+                    </div>
+                    
+                    {lesson && (
+                      <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                        <div className="flex items-center gap-1 text-sm mb-1">
+                          <BookOpen className="w-3.5 h-3.5 text-schedule-purple" />
+                          <span className="font-medium">{lesson.subject}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400">
+                          <div className="flex items-center gap-1">
+                            <User className="w-3 h-3" />
+                            <span>{lesson.teacher}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            <span>Кабинет {lesson.classroom}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })

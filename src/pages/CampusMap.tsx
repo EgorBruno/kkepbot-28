@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTheme } from '../contexts/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 
 const buildings = [
   { id: 'main', name: 'Главный корпус' },
@@ -70,6 +71,7 @@ const CampusMap = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTeachers, setShowTeachers] = useState(true);
   const { theme, getThemeBasedClass } = useTheme();
+  const navigate = useNavigate();
 
   const mapBgClass = getThemeBasedClass({
     light: 'bg-gray-100',
@@ -103,6 +105,10 @@ const CampusMap = () => {
     setSelectedFloor(value);
   };
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   const getFilteredRooms = () => {
     if (!selectedBuilding || !selectedFloor) return [];
     
@@ -128,7 +134,7 @@ const CampusMap = () => {
       <div className="max-w-[800px] mx-auto">
         {/* Header with back button */}
         <div className="flex items-center justify-between mb-6">
-          <Button variant="ghost" onClick={() => window.close()} className="flex items-center gap-2">
+          <Button variant="ghost" onClick={handleBack} className="flex items-center gap-2">
             <ArrowLeft size={18} />
             <span>Назад</span>
           </Button>

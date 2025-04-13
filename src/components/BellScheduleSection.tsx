@@ -31,6 +31,10 @@ const BellScheduleSection = () => {
       defaultClass: 'card-hover'
     });
   };
+
+  // Get only the first 4 pairs for each schedule
+  const limitedWeekdaySchedule = weekdaySchedule.slice(0, 4);
+  const limitedSaturdaySchedule = saturdaySchedule.slice(0, 4);
   
   return (
     <Card className="mb-4 card-shadow">
@@ -42,7 +46,7 @@ const BellScheduleSection = () => {
           </TabsList>
           
           <TabsContent value="weekday" className="space-y-2">
-            {weekdaySchedule.map((period) => (
+            {limitedWeekdaySchedule.map((period) => (
               <div key={period.id} className={`flex justify-between p-3 border rounded-md ${getCardHoverClass()}`}>
                 <div className="font-medium">{period.name}</div>
                 <div>{period.startTime} - {period.endTime}</div>
@@ -51,7 +55,7 @@ const BellScheduleSection = () => {
           </TabsContent>
           
           <TabsContent value="saturday" className="space-y-2">
-            {saturdaySchedule.map((period) => (
+            {limitedSaturdaySchedule.map((period) => (
               <div key={period.id} className={`flex justify-between p-3 border rounded-md ${getCardHoverClass()}`}>
                 <div className="font-medium">{period.name}</div>
                 <div>{period.startTime} - {period.endTime}</div>

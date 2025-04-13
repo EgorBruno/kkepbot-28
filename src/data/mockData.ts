@@ -1,5 +1,5 @@
 
-import { Student, Absence, DutyAssignment } from '../types';
+import { Student, Absence, DutyAssignment, Lesson } from '../types';
 
 export const students: Student[] = [
   { id: 1, name: 'Иванов Иван', group: 'ИС-31', totalDutyCount: 3 },
@@ -25,6 +25,15 @@ export const dutyAssignments: DutyAssignment[] = [
   { id: 2, studentId: 6, date: '2025-04-13', completed: false },
   { id: 3, studentId: 2, date: '2025-04-14', completed: false },
   { id: 4, studentId: 7, date: '2025-04-14', completed: false },
+];
+
+export const dailyLessons: Lesson[] = [
+  { id: 1, periodId: 1, subject: 'Математика', teacher: 'Петрова А.В.', classroom: '301' },
+  { id: 2, periodId: 2, subject: 'Информатика', teacher: 'Сидоров И.П.', classroom: '412' },
+  { id: 3, periodId: 3, subject: 'Английский язык', teacher: 'Иванова Е.А.', classroom: '205' },
+  { id: 4, periodId: 4, subject: 'Физика', teacher: 'Кузнецов Д.С.', classroom: '308' },
+  { id: 5, periodId: 5, subject: 'Программирование', teacher: 'Смирнов К.Л.', classroom: '401' },
+  { id: 6, periodId: 6, subject: 'Базы данных', teacher: 'Морозов Н.А.', classroom: '402' },
 ];
 
 export const getAbsentStudents = (date: string): Student[] => {
@@ -57,4 +66,8 @@ export const getDutyAssignments = (date: string): (DutyAssignment & { student: S
 
 export const getStudentById = (id: number): Student | undefined => {
   return students.find(student => student.id === id);
+};
+
+export const getLessonByPeriodId = (periodId: number): Lesson | undefined => {
+  return dailyLessons.find(lesson => lesson.periodId === periodId);
 };
