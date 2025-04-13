@@ -7,7 +7,7 @@ import { getCurrentDayType } from '../utils/dateUtils';
 import { useTheme } from '../contexts/ThemeContext';
 
 const BellScheduleSection = () => {
-  const { theme } = useTheme();
+  const { theme, getThemeBasedClass } = useTheme();
   const [activeTab, setActiveTab] = useState<'weekday' | 'saturday'>('weekday');
   
   useEffect(() => {
@@ -22,10 +22,14 @@ const BellScheduleSection = () => {
   
   // Адаптивный класс для наведения на карточку в зависимости от темы
   const getCardHoverClass = () => {
-    if (theme === 'dark') {
-      return 'hover:bg-gray-800';
-    }
-    return 'card-hover';
+    return getThemeBasedClass({
+      light: 'hover:bg-gray-50 border-gray-100',
+      dark: 'hover:bg-gray-800 border-gray-700',
+      blue: 'hover:bg-blue-50 border-blue-100',
+      green: 'hover:bg-green-50 border-green-100',
+      purple: 'hover:bg-purple-50 border-purple-100',
+      defaultClass: 'card-hover'
+    });
   };
   
   return (

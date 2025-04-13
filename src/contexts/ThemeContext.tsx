@@ -20,6 +20,14 @@ type ThemeContextType = {
   theme: string;
   setTheme: (theme: string) => void;
   getCurrentThemeOption: () => ThemeOption;
+  getThemeBasedClass: (options: {
+    light?: string;
+    dark?: string;
+    purple?: string;
+    blue?: string;
+    green?: string;
+    defaultClass?: string;
+  }) => string;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -59,11 +67,35 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const getCurrentThemeOption = (): ThemeOption => {
     return themeOptions.find(t => t.id === theme) || themeOptions[0];
   };
+  
+  // Helper function to get the appropriate class based on current theme
+  const getThemeBasedClass = (options: {
+    light?: string;
+    dark?: string;
+    purple?: string;
+    blue?: string;
+    green?: string;
+    defaultClass?: string;
+  }): string => {
+    switch (theme) {
+      case 'dark':
+        return options.dark || options.defaultClass || '';
+      case 'purple':
+        return options.purple || options.defaultClass || '';
+      case 'blue':
+        return options.blue || options.defaultClass || '';
+      case 'green':
+        return options.green || options.defaultClass || '';
+      default: // light
+        return options.light || options.defaultClass || '';
+    }
+  };
 
   const value = {
     theme,
     setTheme: handleThemeChange,
-    getCurrentThemeOption
+    getCurrentThemeOption,
+    getThemeBasedClass
   };
 
   return (

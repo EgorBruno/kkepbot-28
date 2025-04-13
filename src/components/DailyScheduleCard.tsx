@@ -7,7 +7,7 @@ import { getCurrentPeriodInfo } from '../utils/dateUtils';
 import { useTheme } from '../contexts/ThemeContext';
 
 const DailyScheduleCard = () => {
-  const { theme } = useTheme();
+  const { theme, getThemeBasedClass } = useTheme();
   const dayType = getCurrentDayType();
   const schedule = getDailySchedule(dayType === 'saturday' ? 'saturday' : 'weekday');
   const periodInfo = getCurrentPeriodInfo(schedule);
@@ -19,16 +19,31 @@ const DailyScheduleCard = () => {
   
   // Определяем цвета активной пары в зависимости от темы
   const getActiveClassStyles = () => {
-    switch (theme) {
-      case 'blue':
-        return 'bg-schedule-blue border-l-4 border-schedule-purple';
-      case 'green':
-        return 'bg-schedule-lightPurple border-l-4 border-schedule-purple';
-      case 'dark':
-        return 'bg-gray-700 border-l-4 border-gray-400';
-      default: // Фиолетовая тема
-        return 'bg-schedule-lightPurple border-l-4 border-schedule-purple';
-    }
+    return getThemeBasedClass({
+      light: 'bg-schedule-lightPurple border-l-4 border-schedule-purple',
+      dark: 'bg-gray-700 border-l-4 border-schedule-purple',
+      blue: 'bg-schedule-blue border-l-4 border-schedule-darkBlue',
+      green: 'bg-schedule-lightPurple border-l-4 border-schedule-green',
+      purple: 'bg-schedule-lightPurple border-l-4 border-schedule-purple'
+    });
+  };
+  
+  const getPastClassStyles = () => {
+    return getThemeBasedClass({
+      light: 'bg-gray-50 text-gray-500',
+      dark: 'bg-gray-800 text-gray-400',
+      defaultClass: 'bg-gray-50 text-gray-500'
+    });
+  };
+  
+  const getUpcomingClassStyles = () => {
+    return getThemeBasedClass({
+      light: 'bg-white border border-gray-100',
+      dark: 'bg-gray-900 border border-gray-700',
+      blue: 'bg-white border border-blue-100',
+      green: 'bg-white border border-green-100',
+      purple: 'bg-white border border-purple-100'
+    });
   };
   
   return (
@@ -50,8 +65,8 @@ const DailyScheduleCard = () => {
                     isActive 
                       ? getActiveClassStyles()
                       : isPast 
-                        ? 'bg-gray-50 text-gray-500' 
-                        : 'bg-white border border-gray-100'
+                        ? getPastClassStyles() 
+                        : getUpcomingClassStyles()
                   }`}
                 >
                   <div className="font-medium">{period.name}</div>

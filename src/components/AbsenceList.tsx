@@ -20,10 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import { useTheme } from '../contexts/ThemeContext';
 
 const today = format(new Date(), 'yyyy-MM-dd');
 
 const AbsenceList = () => {
+  const { theme, getThemeBasedClass } = useTheme();
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentAbsences, setCurrentAbsences] = useState(absences.filter(a => a.date === today));
   const [isLocked, setIsLocked] = useState(true);
@@ -54,6 +56,35 @@ const AbsenceList = () => {
     setCurrentAbsences(prev => prev.filter(absence => absence.studentId !== studentId));
   };
   
+  // Get theme-based classes
+  const getInfoBoxClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-gray-50 text-gray-500',
+      dark: 'bg-gray-800 text-gray-400',
+      blue: 'bg-blue-50 text-blue-800',
+      green: 'bg-green-50 text-green-800',
+      purple: 'bg-purple-50 text-purple-800',
+    });
+  };
+  
+  const getAbsentBgClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-rose-50 border-rose-200',
+      dark: 'bg-rose-900/20 border-rose-800/30',
+      blue: 'bg-red-50 border-red-200',
+      green: 'bg-red-50 border-red-200',
+      purple: 'bg-rose-50 border-rose-200',
+    });
+  };
+  
+  const getCardClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-white',
+      dark: 'bg-gray-800',
+      defaultClass: 'bg-white'
+    });
+  };
+  
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -78,12 +109,12 @@ const AbsenceList = () => {
         </Button>
       </div>
       
-      <div className="text-sm text-gray-500 mb-4 bg-gray-50 p-3 rounded-lg">
+      <div className={`text-sm mb-4 ${getInfoBoxClass()} p-3 rounded-lg`}>
         <p>{formatDisplayDate(selectedDate)}</p>
         <p className="mt-1">{isLocked ? 'Редактирование заблокировано' : 'Редактирование разблокировано'}</p>
       </div>
       
-      <div className="bg-white rounded-lg shadow mb-4">
+      <div className={`${getCardClass()} rounded-lg shadow mb-4`}>
         <div className="p-4 border-b">
           <div className="flex justify-between items-center">
             <span className="font-medium">Всего в группе:</span>
@@ -109,13 +140,17 @@ const AbsenceList = () => {
             <div 
               key={student.id} 
               className={`p-4 rounded-lg border flex justify-between items-center ${
-                absent ? 'bg-rose-50 border-rose-200' : 'bg-white'
+                absent ? getAbsentBgClass() : getCardClass()
               }`}
             >
               <div>
                 <div className="font-medium">{student.name}</div>
                 {absent && (
-                  <div className="text-sm text-gray-500">
+                  <div className={getThemeBasedClass({
+                    light: 'text-sm text-gray-500',
+                    dark: 'text-sm text-gray-400',
+                    defaultClass: 'text-sm text-gray-500'
+                  })}>
                     Причина: {absence?.reason}
                   </div>
                 )}
@@ -138,7 +173,11 @@ const AbsenceList = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-schedule-gray"
+                      className={getThemeBasedClass({
+                        light: 'text-schedule-gray',
+                        dark: 'text-gray-400',
+                        defaultClass: 'text-schedule-gray'
+                      })}
                       disabled={isLocked}
                     >
                       <CheckCircle2 size={18} className="mr-1" />

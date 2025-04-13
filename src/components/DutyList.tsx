@@ -17,10 +17,12 @@ import {
 } from './ui/dialog';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
+import { useTheme } from '../contexts/ThemeContext';
 
 const today = format(new Date(), 'yyyy-MM-dd');
 
 const DutyList = () => {
+  const { theme, getThemeBasedClass } = useTheme();
   const [selectedDate, setSelectedDate] = useState(today);
   const [isLocked, setIsLocked] = useState(true);
   const [assignments, setAssignments] = useState(
@@ -110,6 +112,53 @@ const DutyList = () => {
   
   const recommendedStudents = calculateNextDutyStudents();
   
+  // Get theme-based classes
+  const getInfoBoxClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-gray-50 text-gray-500',
+      dark: 'bg-gray-800 text-gray-400',
+      blue: 'bg-blue-50 text-blue-800',
+      green: 'bg-green-50 text-green-800',
+      purple: 'bg-purple-50 text-purple-800',
+    });
+  };
+  
+  const getCompletedBgClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-green-50 border-green-200',
+      dark: 'bg-green-900/20 border-green-800/30',
+      blue: 'bg-blue-50 border-blue-200',
+      green: 'bg-green-50 border-green-200',
+      purple: 'bg-purple-50 border-purple-200',
+    });
+  };
+  
+  const getNotCompletedBgClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-red-50 border-red-200',
+      dark: 'bg-red-900/20 border-red-800/30',
+      blue: 'bg-red-50 border-red-200',
+      green: 'bg-red-50 border-red-200',
+      purple: 'bg-red-50 border-red-200',
+    });
+  };
+  
+  const getCardClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-white',
+      dark: 'bg-gray-800',
+      defaultClass: 'bg-white'
+    });
+  };
+  
+  const getTextClass = () => {
+    return getThemeBasedClass({
+      light: 'text-gray-500',
+      dark: 'text-gray-400',
+      defaultClass: 'text-gray-500'
+    });
+  };
+  
   return (
     <div className="pb-6">
       <div className="flex items-center justify-between mb-4">
@@ -134,7 +183,7 @@ const DutyList = () => {
         </Button>
       </div>
       
-      <div className="text-sm text-gray-500 mb-4 bg-gray-50 p-3 rounded-lg">
+      <div className={`text-sm mb-4 ${getInfoBoxClass()} p-3 rounded-lg`}>
         <p>{formatDisplayDate(selectedDate)}</p>
         <p className="mt-1">{isLocked ? 'Редактирование заблокировано' : 'Редактирование разблокировано'}</p>
       </div>
@@ -153,7 +202,7 @@ const DutyList = () => {
                 <div key={student.id} className="flex justify-between items-center">
                   <div>
                     <div className="font-medium">{student.name}</div>
-                    <div className="text-sm text-gray-500">
+                    <div className={`text-sm ${getTextClass()}`}>
                       Количество дежурств: {student.totalDutyCount}
                     </div>
                   </div>
@@ -179,16 +228,16 @@ const DutyList = () => {
               key={duty.id}
               className={`p-4 rounded-lg border ${
                 duty.completed 
-                  ? 'bg-green-50 border-green-200' 
+                  ? getCompletedBgClass()
                   : duty.reason 
-                    ? 'bg-red-50 border-red-200' 
-                    : 'bg-white'
+                    ? getNotCompletedBgClass()
+                    : getCardClass()
               } card-hover`}
             >
               <div className="flex justify-between items-start">
                 <div>
                   <div className="font-medium">{duty.student.name}</div>
-                  <div className="text-sm text-gray-500">
+                  <div className={`text-sm ${getTextClass()}`}>
                     Всего дежурств: {duty.student.totalDutyCount}
                   </div>
                   {duty.reason && (
@@ -238,7 +287,7 @@ const DutyList = () => {
           ))}
         </div>
       ) : (
-        <div className="py-8 text-center text-gray-500">
+        <div className={`py-8 text-center ${getTextClass()}`}>
           Нет назначенных дежурных на этот день
         </div>
       )}
@@ -309,12 +358,16 @@ const DutyList = () => {
             {getPresentStudents(selectedDate).map(student => (
               <div
                 key={student.id}
-                className="p-3 border rounded-md mb-2 flex justify-between items-center cursor-pointer hover:bg-gray-50"
+                className={`p-3 border rounded-md mb-2 flex justify-between items-center cursor-pointer ${getThemeBasedClass({
+                  light: 'hover:bg-gray-50',
+                  dark: 'hover:bg-gray-700',
+                  defaultClass: 'hover:bg-gray-50'
+                })}`}
                 onClick={() => assignNewDuty(student)}
               >
                 <div>
                   <div>{student.name}</div>
-                  <div className="text-sm text-gray-500">
+                  <div className={`text-sm ${getTextClass()}`}>
                     Дежурств: {student.totalDutyCount}
                   </div>
                 </div>

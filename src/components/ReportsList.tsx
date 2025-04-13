@@ -16,8 +16,10 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format, addDays } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ReportsList = () => {
+  const { theme, getThemeBasedClass } = useTheme();
   const [dateRange, setDateRange] = useState<{
     from: Date | undefined;
     to: Date | undefined;
@@ -76,25 +78,62 @@ const ReportsList = () => {
     console.log(`Generating ${selectedReportId} report for period:`, dateRange);
   };
 
+  // Theme-based classes
+  const getCardBgClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-white',
+      dark: 'bg-gray-800',
+      defaultClass: 'bg-white'
+    });
+  };
+  
+  const getIconBgClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-schedule-lightPurple',
+      dark: 'bg-gray-700',
+      blue: 'bg-blue-100',
+      green: 'bg-green-100',
+      purple: 'bg-purple-100',
+    });
+  };
+  
+  const getIconColor = () => {
+    return getThemeBasedClass({
+      light: 'text-schedule-purple',
+      dark: 'text-schedule-purple',
+      blue: 'text-schedule-darkBlue',
+      green: 'text-schedule-green',
+      purple: 'text-schedule-purple',
+    });
+  };
+  
+  const getTextClass = () => {
+    return getThemeBasedClass({
+      light: 'text-gray-500',
+      dark: 'text-gray-400',
+      defaultClass: 'text-gray-500'
+    });
+  };
+
   return (
     <div className="pb-6">
       <div className="mb-4">
         <h2 className="text-xl font-semibold">Отчеты</h2>
-        <p className="text-gray-500 text-sm">
+        <p className={`text-sm ${getTextClass()}`}>
           Создавайте и скачивайте отчеты в формате PDF
         </p>
       </div>
 
       <div className="space-y-4">
         {reportTypes.map((report) => (
-          <Card key={report.id} className="p-4 card-hover card-shadow appear-smooth">
+          <Card key={report.id} className={`p-4 card-hover card-shadow appear-smooth ${getCardBgClass()}`}>
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 p-2 bg-schedule-lightPurple rounded-full">
-                {report.icon}
+              <div className={`flex-shrink-0 p-2 ${getIconBgClass()} rounded-full`}>
+                <FileText className={`h-6 w-6 ${getIconColor()}`} />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium">{report.title}</h3>
-                <p className="text-sm text-gray-500 mb-3 line-clamp-2">{report.description}</p>
+                <p className={`text-sm ${getTextClass()} mb-3 line-clamp-2`}>{report.description}</p>
                 
                 {report.progress < 100 && (
                   <div className="mb-3">
@@ -181,7 +220,7 @@ const ReportsList = () => {
             </div>
             
             <div>
-              <p className="text-sm text-gray-500">
+              <p className={`text-sm ${getTextClass()}`}>
                 Выбранный период: <span className="font-medium">{getDateRangeText()}</span>
               </p>
             </div>

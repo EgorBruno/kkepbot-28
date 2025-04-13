@@ -36,6 +36,16 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Schedule theme colors */
+    --schedule-purple: #9b87f5;
+    --schedule-lightPurple: #E5DEFF;
+    --schedule-blue: #D3E4FD;
+    --schedule-darkBlue: #0EA5E9;
+    --schedule-gray: #8E9196;
+    --schedule-darkGray: #1A1F2C;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
   }
 
   .dark {
@@ -66,37 +76,78 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Dark theme schedule colors */
+    --schedule-purple: #9b87f5;
+    --schedule-lightPurple: rgba(155, 135, 245, 0.15);
+    --schedule-blue: rgba(13, 148, 233, 0.15);
+    --schedule-darkBlue: #9b87f5;
+    --schedule-gray: #8E9196;
+    --schedule-darkGray: #e0e0e0;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
   }
   
   .theme-purple {
-    /* Базовые цвета остаются теми же что и в светлой теме */
+    /* Purple theme */
     --primary: 254 86% 75%;
     --schedule-purple: #9b87f5;
     --schedule-lightPurple: #E5DEFF;
-    --schedule-green: #5EB85E;
+    --schedule-blue: #E5DEFF;
+    --schedule-darkBlue: #9b87f5;
+    --schedule-green: #9b87f5;
     --schedule-red: #E76F6F;
+    
+    /* Background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --border: 254 20% 90%;
   }
   
   .theme-blue {
+    /* Blue theme */
     --primary: 210 100% 50%;
     --schedule-purple: #0EA5E9;
     --schedule-lightPurple: #D3E4FD;
+    --schedule-blue: #D3E4FD;
+    --schedule-darkBlue: #0EA5E9;
     --schedule-green: #0EA5E9;
     --schedule-red: #E76F6F;
+    
+    /* Background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 210 40% 98%;
     --card-foreground: 222.2 47.4% 11.2%;
     --border: 214.3 31.8% 91.4%;
+    
+    /* Additional blue theme colors */
+    --accent: 210 60% 95%;
+    --secondary: 210 60% 95%;
   }
   
   .theme-green {
+    /* Green theme */
     --primary: 142 52% 46%;
     --schedule-purple: #5EB85E;
     --schedule-lightPurple: #E2F8E2;
+    --schedule-blue: #E2F8E2;
+    --schedule-darkBlue: #5EB85E;
     --schedule-green: #5EB85E;
     --schedule-red: #E76F6F;
+    
+    /* Background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 140 40% 98%;
     --card-foreground: 222.2 47.4% 11.2%;
     --border: 140 31.8% 91.4%;
+    
+    /* Additional green theme colors */
+    --accent: 142 40% 95%;
+    --secondary: 142 40% 95%;
   }
 }
 
@@ -200,6 +251,7 @@
   animation: glow 3s ease-in-out infinite;
 }
 
+/* Card shadows for different themes */
 .card-shadow {
   box-shadow: 0 4px 20px -2px rgba(155, 135, 245, 0.1);
 }
@@ -216,12 +268,16 @@
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
 }
 
+/* Card hover effects for different themes */
 .card-hover {
   transition: transform 0.16s cubic-bezier(0.17, 0.67, 0.83, 0.67), box-shadow 0.2s ease;
 }
 
 .card-hover:active {
   transform: translateY(1px);
+}
+
+.light .card-hover:active {
   box-shadow: 0 2px 10px -2px rgba(155, 135, 245, 0.05);
 }
 
@@ -237,7 +293,7 @@
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
 }
 
-/* Тематические настройки для компонентов */
+/* Theme-specific button colors */
 .dark button.bg-schedule-green {
   background-color: rgba(94, 184, 94, 0.8);
 }
@@ -260,35 +316,53 @@
   background-color: #5EB85E;
 }
 
-/* Цветовые настройки в зависимости от темы */
-:root {
-  --schedule-purple: #9b87f5;
-  --schedule-lightPurple: #E5DEFF;
-  --schedule-blue: #D3E4FD;
-  --schedule-darkBlue: #0EA5E9;
-  --schedule-gray: #8E9196;
-  --schedule-darkGray: #1A1F2C;
-  --schedule-green: #5EB85E;
-  --schedule-red: #E76F6F;
+/* Fix for dark mode tabs */
+.dark [data-radix-tabs-trigger][data-state='active'] {
+  background-color: #333;
+  color: white;
 }
 
-.theme-blue {
-  --schedule-purple: #0EA5E9;
-  --schedule-lightPurple: #D3E4FD;
-  --schedule-blue: #D3E4FD;
-  --schedule-green: #0EA5E9;
+.dark .tabs-list {
+  background-color: #222;
 }
 
-.theme-green {
-  --schedule-purple: #5EB85E;
-  --schedule-lightPurple: #E2F8E2;
-  --schedule-blue: #E2F8E2;
-  --schedule-green: #5EB85E;
+/* Make dialogs respect dark mode */
+.dark [data-radix-dialog-content] {
+  background-color: #333;
+  color: white;
+  border-color: #444;
 }
 
-.dark {
-  --schedule-purple: #9b87f5;
-  --schedule-lightPurple: rgba(155, 135, 245, 0.15);
-  --schedule-blue: rgba(13, 148, 233, 0.15);
-  --schedule-darkGray: #e0e0e0;
+/* Make Select items respect dark mode */
+.dark [data-radix-select-content] {
+  background-color: #333;
+  color: white;
+  border-color: #444;
+}
+
+.dark [data-radix-select-item] {
+  color: white;
+}
+
+.dark [data-radix-select-item]:hover {
+  background-color: #444;
+}
+
+/* Adjust colors for themed popover content */
+.dark [data-radix-popover-content] {
+  background-color: #333;
+  color: white;
+  border-color: #444;
+}
+
+.theme-blue [data-radix-popover-content] {
+  border-color: #0EA5E9;
+}
+
+.theme-green [data-radix-popover-content] {
+  border-color: #5EB85E;
+}
+
+.theme-purple [data-radix-popover-content] {
+  border-color: #9b87f5;
 }

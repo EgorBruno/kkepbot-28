@@ -14,30 +14,50 @@ const tabs = [
 
 const BottomNavigation = () => {
   const location = useLocation();
-  const { theme } = useTheme();
+  const { theme, getThemeBasedClass } = useTheme();
   
-  // Определяем основной цвет в зависимости от текущей темы
+  // Определяем цвета для активного элемента в зависимости от текущей темы
   const getActiveColorClass = () => {
-    switch (theme) {
-      case 'blue': return 'text-schedule-darkBlue';
-      case 'green': return 'text-schedule-green';
-      case 'dark': return 'text-white';
-      default: return 'text-schedule-purple';
-    }
+    return getThemeBasedClass({
+      light: 'text-schedule-purple',
+      dark: 'text-white',
+      blue: 'text-schedule-darkBlue',
+      green: 'text-schedule-green',
+      purple: 'text-schedule-purple'
+    });
   };
 
   // Определяем фоновый цвет для активных иконок в зависимости от темы
   const getActiveBgClass = () => {
-    switch (theme) {
-      case 'blue': return 'bg-schedule-blue';
-      case 'green': return 'bg-schedule-green/20';
-      case 'dark': return 'bg-gray-700';
-      default: return 'bg-schedule-lightPurple';
-    }
+    return getThemeBasedClass({
+      light: 'bg-schedule-lightPurple',
+      dark: 'bg-gray-700',
+      blue: 'bg-schedule-blue',
+      green: 'bg-schedule-green/20',
+      purple: 'bg-schedule-lightPurple'
+    });
+  };
+  
+  // Цвет для неактивных элементов
+  const getInactiveTextClass = () => {
+    return getThemeBasedClass({
+      light: 'text-muted-foreground',
+      dark: 'text-gray-500',
+      defaultClass: 'text-muted-foreground'
+    });
+  };
+  
+  // Фон для навигационной панели
+  const getNavBgClass = () => {
+    return getThemeBasedClass({
+      light: 'bg-background border-border',
+      dark: 'bg-gray-900 border-gray-800',
+      defaultClass: 'bg-background border-border'
+    });
   };
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border shadow-lg z-10 ultra-smooth">
+    <div className={`fixed bottom-0 left-0 right-0 ${getNavBgClass()} shadow-lg z-10 ultra-smooth`}>
       <div className="max-w-[500px] mx-auto">
         <div className="flex items-center justify-between bottom-tab-height">
           {tabs.map((tab) => {
@@ -49,7 +69,7 @@ const BottomNavigation = () => {
                 key={tab.id}
                 to={tab.path}
                 className={`flex flex-col items-center justify-center flex-1 py-1 smooth-transition ${
-                  isActive ? getActiveColorClass() : 'text-muted-foreground'
+                  isActive ? getActiveColorClass() : getInactiveTextClass()
                 }`}
               >
                 <div className={`p-1.5 rounded-full ${isActive ? getActiveBgClass() : ''}`}>

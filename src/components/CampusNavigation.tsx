@@ -3,10 +3,25 @@ import React from 'react';
 import { MapPin } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
+import { useTheme } from '../contexts/ThemeContext';
 
 const CampusNavigation = () => {
+  const { theme, getThemeBasedClass } = useTheme();
+  
+  const mapBgClass = getThemeBasedClass({
+    light: 'bg-gray-100',
+    dark: 'bg-gray-800',
+    defaultClass: 'bg-gray-100'
+  });
+  
+  const textClass = getThemeBasedClass({
+    light: 'text-gray-500',
+    dark: 'text-gray-400',
+    defaultClass: 'text-gray-500'
+  });
+
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 card-shadow">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center">
           <MapPin className="mr-2 text-schedule-purple" size={20} />
@@ -14,8 +29,8 @@ const CampusNavigation = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="bg-gray-100 rounded-md h-40 flex items-center justify-center">
-          <p className="text-gray-500">План колледжа</p>
+        <div className={`${mapBgClass} rounded-md h-40 flex items-center justify-center`}>
+          <p className={textClass}>План колледжа</p>
         </div>
       </CardContent>
       <CardFooter>
