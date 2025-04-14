@@ -9,10 +9,8 @@ export function formatTime(date: Date): string {
 }
 
 export function getCurrentTime(): Date {
-  // For testing: Simulate a time 1 hour before the end of a class
-  const mockDate = new Date();
-  mockDate.setHours(16, 35, 0); // This will be during the 5th period (16:00 - 17:35)
-  return mockDate;
+  // Return the actual current time for accurate time tracking
+  return new Date();
 }
 
 export function isWeekday(date: Date): boolean {

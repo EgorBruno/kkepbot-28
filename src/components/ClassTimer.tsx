@@ -26,7 +26,6 @@ const ClassTimer = () => {
     progressPercent: 0
   });
   
-  // Temporary mock for testing - make class end at 21:00
   useEffect(() => {
     const updatePeriodInfo = () => {
       const dayType = getCurrentDayType();
@@ -40,16 +39,7 @@ const ClassTimer = () => {
       }
       
       const schedule = getDailySchedule(dayType === 'saturday' ? 'saturday' : 'weekday');
-      
-      // Temporarily modify the schedule for testing purposes
-      const modifiedSchedule = schedule.map(period => {
-        if (period === schedule[schedule.length - 1]) {
-          return { ...period, endTime: '21:00' };
-        }
-        return period;
-      });
-      
-      const info = getCurrentPeriodInfo(modifiedSchedule);
+      const info = getCurrentPeriodInfo(schedule);
       
       // Calculate time to next class in minutes if we're in a break
       let timeToNextClass;
