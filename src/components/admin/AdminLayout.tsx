@@ -163,7 +163,7 @@ export const AdminLayout = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {isMobile ? renderMobileNav() : renderDesktopNav()}
 
-      <main className="pt-16 px-4 pb-16 md:pl-6">
+      <main className="pt-20 px-4 pb-16 md:pl-6">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold">
@@ -179,6 +179,7 @@ export const AdminLayout = () => {
                 size="sm" 
                 variant={activeTab === 'students' ? "default" : "outline"} 
                 onClick={() => handleTabChange('students')}
+                className="p-1 sm:p-2"
               >
                 <Users size={16} />
               </Button>
@@ -186,6 +187,7 @@ export const AdminLayout = () => {
                 size="sm" 
                 variant={activeTab === 'groups' ? "default" : "outline"} 
                 onClick={() => handleTabChange('groups')}
+                className="p-1 sm:p-2"
               >
                 <UserCog size={16} />
               </Button>
@@ -193,6 +195,7 @@ export const AdminLayout = () => {
                 size="sm" 
                 variant={activeTab === 'reports' ? "default" : "outline"} 
                 onClick={() => handleTabChange('reports')}
+                className="p-1 sm:p-2"
               >
                 <FileText size={16} />
               </Button>
@@ -200,13 +203,14 @@ export const AdminLayout = () => {
                 size="sm" 
                 variant={activeTab === 'settings' ? "default" : "outline"} 
                 onClick={() => handleTabChange('settings')}
+                className="p-1 sm:p-2"
               >
                 <Settings size={16} />
               </Button>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 md:p-6 overflow-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 overflow-x-hidden">
             {activeTab === 'students' && <AdminStudentsList />}
             {activeTab === 'groups' && <GroupManagement />}
             {activeTab === 'reports' && <AdminReports />}

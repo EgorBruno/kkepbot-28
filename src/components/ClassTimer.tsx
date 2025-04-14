@@ -140,7 +140,7 @@ const ClassTimer = () => {
   };
   
   return (
-    <div className={`rounded-lg p-4 mb-4 shadow-lg ultra-smooth relative ${getThemeGradient(periodInfo.isBreak)}`}>
+    <div className={`rounded-lg p-4 mb-4 border border-gray-200 dark:border-gray-700 ultra-smooth relative ${getThemeGradient(periodInfo.isBreak)}`}>
       {/* Confetti animation for breaks */}
       {isInBreak && !showWarning && (
         <Confetti type="rest" />
