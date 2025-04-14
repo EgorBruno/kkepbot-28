@@ -1,3 +1,4 @@
+
 import { ClassPeriod } from '../types';
 
 export function formatTime(date: Date): string {

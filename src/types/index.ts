@@ -55,3 +55,7 @@ export type ReportFilter = {
   dateTo?: string;
   type?: ReportType;
 };
+
+export type GroupManagementProps = {
+  onGroupsChange?: (groups: string[]) => void;
+}

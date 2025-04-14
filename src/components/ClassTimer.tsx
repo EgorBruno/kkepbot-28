@@ -9,6 +9,7 @@ import {
 import { getDailySchedule } from '../data/bellSchedule';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '../contexts/ThemeContext';
+import Confetti from './Confetti';
 
 const ClassTimer = () => {
   const { theme, getThemeBasedClass } = useTheme();
@@ -18,6 +19,7 @@ const ClassTimer = () => {
     isBreak: boolean;
     timeRemaining: number;
     progressPercent: number;
+    timeToNextClass?: number;
   }>({
     isBreak: false,
     timeRemaining: 0,
@@ -48,7 +50,23 @@ const ClassTimer = () => {
       });
       
       const info = getCurrentPeriodInfo(modifiedSchedule);
-      setPeriodInfo(info);
+      
+      // Calculate time to next class in minutes if we're in a break
+      let timeToNextClass;
+      if (info.isBreak && info.nextPeriod) {
+        const now = new Date();
+        const [nextHours, nextMinutes] = info.nextPeriod.startTime.split(':').map(Number);
+        const nextClassTime = new Date();
+        nextClassTime.setHours(nextHours, nextMinutes, 0, 0);
+        
+        const timeDiffMs = nextClassTime.getTime() - now.getTime();
+        timeToNextClass = Math.max(0, Math.floor(timeDiffMs / 1000 / 60)); // Convert to minutes
+      }
+      
+      setPeriodInfo({
+        ...info,
+        timeToNextClass
+      });
     };
     
     // Update immediately and then every minute
@@ -74,6 +92,10 @@ const ClassTimer = () => {
   
   // Calculate if we're outside of class hours
   const isAfterClasses = !periodInfo.currentPeriod && !periodInfo.nextPeriod;
+  
+  // Check if we're in break and if there's a warning (less than 2 hours to next class)
+  const isInBreak = periodInfo.isBreak && periodInfo.nextPeriod;
+  const showWarning = isInBreak && periodInfo.timeToNextClass && periodInfo.timeToNextClass <= 120;
   
   // Enhanced subtle RGB gradients based on the theme and status
   const getThemeGradient = (isBreak: boolean) => {
@@ -128,8 +150,18 @@ const ClassTimer = () => {
   };
   
   return (
-    <div className={`rounded-lg p-4 mb-4 shadow-lg ultra-smooth ${getThemeGradient(periodInfo.isBreak)}`}>
-      <div className="flex justify-between items-center mb-3">
+    <div className={`rounded-lg p-4 mb-4 shadow-lg ultra-smooth relative ${getThemeGradient(periodInfo.isBreak)}`}>
+      {/* Confetti animation for breaks */}
+      {isInBreak && !showWarning && (
+        <Confetti type="rest" />
+      )}
+      
+      {/* Warning animation when close to next class */}
+      {showWarning && (
+        <Confetti type="warning" />
+      )}
+      
+      <div className="flex justify-between items-center mb-3 relative z-10">
         <h3 className="font-semibold text-lg">{getStatusText()}</h3>
         {periodInfo.timeRemaining > 0 && !isAfterClasses && (
           <span className={`${getBackgroundTextClass()} px-3 py-1 rounded-full text-sm text-center`}>
@@ -140,7 +172,7 @@ const ClassTimer = () => {
       
       {periodInfo.timeRemaining > 0 && !isAfterClasses && (
         <>
-          <div className={`w-full ${getBackgroundTextClass()} rounded-full h-2.5 mb-2 overflow-hidden`}>
+          <div className={`w-full ${getBackgroundTextClass()} rounded-full h-2.5 mb-2 overflow-hidden relative z-10`}>
             <div 
               className={`h-2.5 rounded-full bg-gradient-to-r ${getProgressBarClass(periodInfo.isBreak)}`}
               style={{ 
@@ -150,7 +182,7 @@ const ClassTimer = () => {
             ></div>
           </div>
           
-          <div className="flex justify-between text-sm text-schedule-darkGray/80">
+          <div className="flex justify-between text-sm text-schedule-darkGray/80 relative z-10">
             {periodInfo.isBreak ? (
               <>
                 <span>{periodInfo.currentPeriod?.endTime || ''}</span>
@@ -165,7 +197,7 @@ const ClassTimer = () => {
           </div>
           
           {periodInfo.nextPeriod && (
-            <div className="mt-3 text-sm text-schedule-darkGray">
+            <div className="mt-3 text-sm text-schedule-darkGray relative z-10">
               <div className={`${getBackgroundTextClass()} px-3 py-2 rounded-md inline-block`}>
                 <span>Следующая пара: </span>
                 <span className="font-semibold">{periodInfo.nextPeriod.name} ({periodInfo.nextPeriod.startTime})</span>
