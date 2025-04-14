@@ -1,38 +1,386 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .animate-float {
-    animation: floating 5s ease-in-out infinite;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 254 86% 75%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    /* Schedule theme colors */
+    --schedule-purple: #9b87f5;
+    --schedule-lightPurple: #E5DEFF;
+    --schedule-blue: #D3E4FD;
+    --schedule-darkBlue: #0EA5E9;
+    --schedule-gray: #8E9196;
+    --schedule-darkGray: #1A1F2C;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 254 86% 75%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+
+    /* Dark theme schedule colors */
+    --schedule-purple: #9b87f5;
+    --schedule-lightPurple: rgba(155, 135, 245, 0.15);
+    --schedule-blue: rgba(13, 148, 233, 0.15);
+    --schedule-darkBlue: #9b87f5;
+    --schedule-gray: #8E9196;
+    --schedule-darkGray: #e0e0e0;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
   }
   
+  .theme-purple {
+    /* Purple theme */
+    --primary: 254 86% 75%;
+    --schedule-purple: #9b87f5;
+    --schedule-lightPurple: #E5DEFF;
+    --schedule-blue: #E5DEFF;
+    --schedule-darkBlue: #9b87f5;
+    --schedule-green: #9b87f5;
+    --schedule-red: #E76F6F;
+    
+    /* Background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --border: 254 20% 90%;
+  }
+  
+  .theme-blue {
+    /* Blue theme */
+    --primary: 210 100% 50%;
+    --schedule-purple: #0EA5E9;
+    --schedule-lightPurple: #D3E4FD;
+    --schedule-blue: #D3E4FD;
+    --schedule-darkBlue: #0EA5E9;
+    --schedule-green: #0EA5E9;
+    --schedule-red: #E76F6F;
+    
+    /* Background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 210 40% 98%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --border: 214.3 31.8% 91.4%;
+    
+    /* Additional blue theme colors */
+    --accent: 210 60% 95%;
+    --secondary: 210 60% 95%;
+  }
+  
+  .theme-green {
+    /* Green theme */
+    --primary: 142 52% 46%;
+    --schedule-purple: #5EB85E;
+    --schedule-lightPurple: #E2F8E2;
+    --schedule-blue: #E2F8E2;
+    --schedule-darkBlue: #5EB85E;
+    --schedule-green: #5EB85E;
+    --schedule-red: #E76F6F;
+    
+    /* Background and text colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 140 40% 98%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --border: 140 31.8% 91.4%;
+    
+    /* Additional green theme colors */
+    --accent: 142 40% 95%;
+    --secondary: 142 40% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-nunito;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  .font-nunito {
+    font-family: 'Nunito', sans-serif;
+  }
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .smooth-transition {
+    transition: all 0.16s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  }
+  
+  .ultra-smooth {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform, opacity;
+  }
+  
+  /* Gradient animation */
   .animate-gradient-x {
+    background-size: 200% 200%;
     animation: gradient-x 15s ease infinite;
-    background-size: 400% 400%;
+  }
+  
+  @keyframes gradient-x {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 }
 
-@keyframes floating {
-  0% {
-    transform: translateY(0) rotate(0);
+.mobile-container {
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-tab-height {
+  height: 64px;
+}
+
+.content-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: calc(64px + 1rem);
+}
+
+/* Enhanced animations */
+@keyframes smooth-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-  50% {
-    transform: translateY(-20px) rotate(10deg);
-  }
-  100% {
-    transform: translateY(0) rotate(0);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes gradient-x {
-  0% {
-    background-position: 0% 50%;
+@keyframes pulse-minimal {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
   }
   50% {
-    background-position: 100% 50%;
+    opacity: 0.85;
+    transform: scale(1.02);
   }
-  100% {
-    background-position: 0% 50%;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px 2px rgba(155, 135, 245, 0.3);
   }
+  50% {
+    box-shadow: 0 0 15px 5px rgba(155, 135, 245, 0.5);
+  }
+}
+
+.appear-smooth {
+  animation: smooth-appear 0.24s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.pulse-minimal {
+  animation: pulse-minimal 2s ease-in-out infinite;
+}
+
+.glow-effect {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Card shadows for different themes */
+.card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(155, 135, 245, 0.1);
+}
+
+.theme-blue .card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(13, 148, 233, 0.1);
+}
+
+.theme-green .card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(94, 184, 94, 0.1);
+}
+
+.dark .card-shadow {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Card hover effects for different themes */
+.card-hover {
+  transition: transform 0.16s cubic-bezier(0.17, 0.67, 0.83, 0.67), box-shadow 0.2s ease;
+}
+
+.card-hover:active {
+  transform: translateY(1px);
+}
+
+.light .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(155, 135, 245, 0.05);
+}
+
+.theme-blue .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(13, 148, 233, 0.05);
+}
+
+.theme-green .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(94, 184, 94, 0.05);
+}
+
+.dark .card-hover:active {
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Theme-specific button colors */
+.dark button.bg-schedule-green {
+  background-color: rgba(94, 184, 94, 0.8);
+}
+
+.dark button.bg-schedule-purple {
+  background-color: rgba(155, 135, 245, 0.8);
+}
+
+.dark button.bg-schedule-lightPurple {
+  background-color: rgba(229, 222, 255, 0.2);
+}
+
+.theme-blue button.bg-schedule-green,
+.theme-blue button.bg-schedule-purple {
+  background-color: #0EA5E9;
+}
+
+.theme-green button.bg-schedule-green,
+.theme-green button.bg-schedule-purple {
+  background-color: #5EB85E;
+}
+
+/* Fix for dark mode tabs */
+.dark [data-radix-tabs-trigger][data-state='active'] {
+  background-color: #333;
+  color: white;
+}
+
+.dark .tabs-list {
+  background-color: #222;
+}
+
+/* Make dialogs respect dark mode */
+.dark [data-radix-dialog-content] {
+  background-color: #333;
+  color: white;
+  border-color: #444;
+}
+
+/* Make Select items respect dark mode */
+.dark [data-radix-select-content] {
+  background-color: #333;
+  color: white;
+  border-color: #444;
+}
+
+.dark [data-radix-select-item] {
+  color: white;
+}
+
+.dark [data-radix-select-item]:hover {
+  background-color: #444;
+}
+
+/* Adjust colors for themed popover content */
+.dark [data-radix-popover-content] {
+  background-color: #333;
+  color: white;
+  border-color: #444;
+}
+
+.theme-blue [data-radix-popover-content] {
+  border-color: #0EA5E9;
+}
+
+.theme-green [data-radix-popover-content] {
+  border-color: #5EB85E;
+}
+
+.theme-purple [data-radix-popover-content] {
+  border-color: #9b87f5;
 }

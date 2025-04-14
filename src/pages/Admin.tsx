@@ -2,23 +2,17 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { AdminLayout } from '../components/admin/AdminLayout';
-import { Toaster } from '@/components/ui/sonner';
 
 const Admin = () => {
-  // Проверка аутентификации - можно будет заменить на более надежную систему позже
+  // Simple authentication check - can be replaced with a proper auth system later
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
   
   if (!isAdmin) {
-    // Перенаправление на страницу входа, если пользователь не аутентифицирован
+    // Redirect to login page if not authenticated
     return <Navigate to="/admin/login" />;
   }
   
-  return (
-    <>
-      <AdminLayout />
-      <Toaster position="bottom-right" />
-    </>
-  );
+  return <AdminLayout />;
 };
 
 export default Admin;
